@@ -1,0 +1,13 @@
+Package: RegSDC
+Type: Package
+Title: Information Preserving Regression-based Tools for Statistical Disclosure Control
+Version: 0.0.1
+Date: 2018-12-20
+Author: Øyvind Langsrud
+Maintainer: Øyvind Langsrud <oyl@ssb.no>
+Depends: R (>= 3.0.0)
+Description: Implementation of the methods described in the paper with the above title.
+License: Apache License 2.0 | file LICENSE
+LazyData: TRUE
+Encoding: UTF-8
+RoxygenNote: 6.1.1
