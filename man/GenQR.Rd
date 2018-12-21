@@ -23,7 +23,7 @@ GenQR(x, doSVD = FALSE, findR = TRUE, makeunique = findR,
 List with Q and R or just Q
 }
 \description{
-Matrix X decomposed as Q and R (X=QR) where columns of Q are orthogonal.
+Matrix X decomposed as Q and R (X=QR) where columns of Q are orthonormal.
 Ordinary QR or SVD may be used.
 }
 \details{

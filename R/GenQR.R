@@ -1,6 +1,6 @@
 #' Generalized QR decomposition
 #' 
-#' Matrix X decomposed as Q and R (X=QR) where columns of Q are orthogonal.
+#' Matrix X decomposed as Q and R (X=QR) where columns of Q are orthonormal.
 #' Ordinary QR or SVD may be used. 
 #' 
 #' @encoding UTF8
