@@ -22,64 +22,54 @@
 #'    GenQR(matrix(rnorm(15),5,3))
 #'    GenQR(matrix(rnorm(15),5,3)[,c(1,2,1,3)])
 #'    GenQR(matrix(rnorm(15),5,3)[,c(1,2,1,3)],TRUE)
-GenQR = function(x,doSVD=FALSE,findR=TRUE,makeunique=findR,tol = 1e-07){
-  if(is.null(x)) return(NULL)
-  if(doSVD){  # inspierd by ginv i MASS
+GenQR <- function(x, doSVD = FALSE, findR = TRUE, makeunique = findR, tol = 1e-07) {
+  if (is.null(x)) 
+    return(NULL)
+  if (doSVD) {
+    # inspierd by ginv i MASS
     xSvd <- svd(x)
     Positive <- xSvd$d > max(tol * xSvd$d[1L], 0)
-    Q = xSvd$u[, Positive, drop = FALSE]
-    if(findR|makeunique){ 
-      if(makeunique){
-        v = t(xSvd$v[, Positive, drop = FALSE])
-        #print(v)
-        sgn =  sign(rowSums(v))
-        Q   <- Q %*% Diag(sgn)
-        if(!findR) return(Q)
-        R = sgn*xSvd$d[Positive]*v
-      } else
-        R = xSvd$d[Positive] * t(xSvd$v[, Positive, drop = FALSE])
-    }
-    else return(Q)
-    return(list(Q=Q,R=R))
+    Q <- xSvd$u[, Positive, drop = FALSE]
+    if (findR | makeunique) {
+      if (makeunique) {
+        v <- t(xSvd$v[, Positive, drop = FALSE])
+        # print(v)
+        sgn <- sign(rowSums(v))
+        Q <- Q %*% Diag(sgn)
+        if (!findR) 
+          return(Q)
+        R <- sgn * xSvd$d[Positive] * v
+      } else R <- xSvd$d[Positive] * t(xSvd$v[, Positive, drop = FALSE])
+    } else return(Q)
+    return(list(Q = Q, R = R))
   }
-  qrX = qr(x,tol=tol)
-  Q = qr.Q(qrX)[,seq_len(qrX$rank),drop=FALSE]
-  if(findR|makeunique) {
-    R = qr.R(qrX)
-    if(makeunique){
-      R = R[seq_len(qrX$rank), ,drop=FALSE]
+  qrX <- qr(x, tol = tol)
+  Q <- qr.Q(qrX)[, seq_len(qrX$rank), drop = FALSE]
+  if (findR | makeunique) {
+    R <- qr.R(qrX)
+    if (makeunique) {
+      R <- R[seq_len(qrX$rank), , drop = FALSE]
       sgn <- sign(Diag(R))
-      Q   <- Q %*% Diag(sgn)
-      if(!findR) return(Q)
+      Q <- Q %*% Diag(sgn)
+      if (!findR) 
+        return(Q)
       R <- Diag(sgn) %*% R
-      R = R[ ,sort.list(qrX$pivot),drop=FALSE]
-    }
-    else
-      R = R[seq_len(qrX$rank),sort.list(qrX$pivot),drop=FALSE]
-  }
-  else 
-    return(Q)
-  return(list(Q=Q,R=R))
+      R <- R[, sort.list(qrX$pivot), drop = FALSE]
+    } else R <- R[seq_len(qrX$rank), sort.list(qrX$pivot), drop = FALSE]
+  } else return(Q)
+  return(list(Q = Q, R = R))
 }
 
 # See note in documentation od diag
-Diag = function(x){
-  if(is.matrix(x)) return(diag(x))
+Diag <- function(x) {
+  if (is.matrix(x)) 
+    return(diag(x))
   diag(x, nrow = length(x))
 }
 
 
-GenQRQR = function(x,...){
-  z=GenQR(x,...)
-  z$Q%*%z$R
+GenQRQR <- function(x, ...) {
+  z <- GenQR(x, ...)
+  z$Q %*% z$R
 }
 
-if(FALSE){
-  x=matrix(rnorm(15),5,3)[,c(1,2,1,3)]
-  for(a in c(FALSE,TRUE))
-    for(b in c(FALSE,TRUE))
-      print(max(abs(LangsrudWorks:::GenQRQR(x,a,TRUE,b) -x)))
-  x=matrix(rnorm(15),5,3)[,c(1,2,1,3)]
-  for(a in c(FALSE,TRUE))
-    print(GenQR(x,a,FALSE,TRUE)/GenQR(x,a,FALSE,FALSE))
-  }
