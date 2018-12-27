@@ -109,9 +109,39 @@ RegSDCnew <- function(y, yNew, x = matrix(1, NROW(y), 1), doSVD = FALSE) {
 }
 
 
-
-
-
-
-
+#' Regression-based SDC Tools - Random orthogonal matrix masking (ROMM)
+#'
+#' Implementation based on equations 11, 12 and 17 in the paper.
+#'
+#' @encoding UTF8
+#'
+#' @param y Matrix of confidential variables
+#' @param lambda ROMM parameter
+#' @param x Matrix of non-confidential variables (including a constant term (column of ones)) 
+#' @param doSVD SVD when TRUE and QR when FALSE
+#' 
+#' @details doSVD has effect on decomposition of y and yNew. 
+#' The exact behaviour of the method depends on the choice of the decomposition method because of 
+#' the sequentially phenomenon mentioned in the paper. 
+#' The similarity to the original data will tend to be highest for the first component. 
+#' 
+#' @return Generated version of y
+#' @export
+#'
+#' @examples
+#' x1 <- 1:5
+#' x <- cbind(x0 = 1, x1 = x1)
+#' y <- matrix(rnorm(15) + 1:15, 5, 3)
+#' 
+#' # Same as IPSO (RegSDCipso)
+#' RegSDCromm(y, Inf, x)
+#' 
+#' # Close to IPSO
+#' RegSDCromm(y, 100, x)
+#' 
+#' # Close to y
+#' RegSDCromm(y, 0.001, x)
+RegSDCromm <- function(y, lambda = Inf, x = matrix(1, NROW(y), 1), doSVD = FALSE) {
+  RegSDCgen(y = y, x = x, doSVD =doSVD, lambda = lambda)
+}
 
