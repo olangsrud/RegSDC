@@ -1,4 +1,4 @@
-#  R package RegSDC (forthcoming)
+#  R package RegSDC
 
 ### Information Preserving Regression-based Tools for Statistical Disclosure Control
 
