@@ -11,13 +11,14 @@
 #' @param epsAlpha Precision constant for alpha calculation 
 #' @param AlphaHandler Function (warning or stop) to be used when alpha<1 
 #' @param alphaAttr When TRUE alpha is attribute in output 
+#' @param makeunique Parameter to be used in GenQR
 #' 
 #' @details  Use epsAlpha=NULL to avoid calculation of alpha. Use of alpha (<1) will produce a warning. 
 #' 
 #' @return Generated version of y
 #' @keywords internal
 #' @export
-RegSDCaddGen <- function(y, yStart, x = matrix(1, NROW(y), 1), epsAlpha = 1e-07, AlphaHandler = warning, alphaAttr = TRUE) {
+RegSDCaddGen <- function(y, yStart, x = matrix(1, NROW(y), 1), epsAlpha = 1e-07, AlphaHandler = warning, alphaAttr = TRUE, makeunique = TRUE) {
   xQ <- GenQR(x, doSVD = FALSE, findR = FALSE)
   yHat <- xQ %*% (t(xQ) %*% y)
   yHatStart <- xQ %*% (t(xQ) %*% yStart)
@@ -35,7 +36,7 @@ RegSDCaddGen <- function(y, yStart, x = matrix(1, NROW(y), 1), epsAlpha = 1e-07,
   m <- NCOL(y)  # collinear y not treated
   ySim <- matrix(rnorm(n * m), n, m)
   
-  newQ <- GenQR(cbind(xQ, yStart, ySim), findR = FALSE)[, -seq_len(NCOL(xQ) + m), drop = FALSE]
+  newQ <- GenQR(cbind(xQ, yStart, ySim), findR = FALSE, makeunique = makeunique)[, -seq_len(NCOL(xQ) + m), drop = FALSE]
   
   if (NCOL(newQ) < m) 
     stop("Not enough dimensions")

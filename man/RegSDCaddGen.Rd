@@ -6,7 +6,7 @@
 \title{Regression-based SDC Tools - Synthetic addition}
 \usage{
 RegSDCaddGen(y, yStart, x = matrix(1, NROW(y), 1), epsAlpha = 1e-07,
-  AlphaHandler = warning, alphaAttr = TRUE)
+  AlphaHandler = warning, alphaAttr = TRUE, makeunique = TRUE)
 }
 \arguments{
 \item{y}{Matrix of confidential variables}
@@ -20,6 +20,8 @@ RegSDCaddGen(y, yStart, x = matrix(1, NROW(y), 1), epsAlpha = 1e-07,
 \item{AlphaHandler}{Function (warning or stop) to be used when alpha<1}
 
 \item{alphaAttr}{When TRUE alpha is attribute in output}
+
+\item{makeunique}{Parameter to be used in GenQR}
 }
 \value{
 Generated version of y
