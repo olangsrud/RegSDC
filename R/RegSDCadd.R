@@ -87,17 +87,17 @@ RegSDCaddGen <- function(y, yStart, x = matrix(1, NROW(y), 1), epsAlpha = 1e-07,
 #' # With yStart as input and alpha limit in use (warning produced)
 #' yOut <- RegSDCadd(y, NULL, x, 2 * y + matrix(rnorm(30), 10, 3))
 #' attr(yOut, "alpha")
-RegSDCadd = function(y,resCorr = NULL, x=matrix(1,NROW(y),1), yStart = NULL){
-  if(is.null(resCorr)){
-    if(is.null(yStart))
+RegSDCadd <- function(y, resCorr = NULL, x = matrix(1, NROW(y), 1), yStart = NULL) {
+  if (is.null(resCorr)) {
+    if (is.null(yStart)) 
       stop("resCorr or yStart must be supplied")
   } else {
-    if(!is.null(yStart))
+    if (!is.null(yStart)) 
       stop("resCorr or yStart must be NULL")
-    resCorr =  rep_len(resCorr, NCOL(y))
-    yStart = outer(rep(1,NROW(y)),resCorr) * y
+    resCorr <- rep_len(resCorr, NCOL(y))
+    yStart <- outer(rep(1, NROW(y)), resCorr) * y
   }
-  RegSDCaddGen(y,yStart,x)
+  RegSDCaddGen(y, yStart, x)
 }
 
 
