@@ -35,25 +35,15 @@ CalculateC <- function(a, b, epsAlpha = 1e-07, AlphaHandler = warning) {
 #' @export
 #'
 FindAlpha <- function(a, b) {
-  aCol <- IndependentCol(a)
-  bCol <- IndependentCol(b)
-  cCol <- aCol | bCol
-  if (any(!cCol)) {
-    stop("Problematic collinearity detected. Not handled in this version.")
-  }
   ata <- t(a) %*% a
   btb <- t(b) %*% b
-  if (!any(aCol != cCol)) {
-    # ata invertible
-    m <- solve(ata, btb)
+  m <- try(solve(ata, btb), silent = TRUE)
+  if (!inherits(m, "try-error")) 
     return(sqrt(MinEigen(m, inverse = TRUE)))
-  }
-  if (!any(bCol != cCol)) {
-    # btb invertible
-    m <- solve(btb, ata)
+  m <- try(solve(btb, ata), silent = TRUE)
+  if (!inherits(m, "try-error")) 
     return(sqrt(MinEigen(m, inverse = FALSE)))
-  }
-  stop("Could not calculate alpha.")
+  stop("Could not calculate alpha. Problematic collinearity?")
 }
 
 
@@ -64,12 +54,6 @@ FindAlphaSimple <- function(a, b) {
   sqrt(min(eigen(m, only.values = TRUE)$values))
 }
 
-IndependentCol <- function(x, tol = 1e-07) {
-  a <- rep(FALSE, NCOL(x))
-  qrX <- qr(x, tol = tol)
-  a[qrX$pivot[seq_len(qrX$rank)]] <- TRUE
-  a
-}
 
 # Use of tol inspierd by ginv i MASS
 MinEigen <- function(x, tol = sqrt(.Machine$double.eps), inverse = TRUE, ...) {
