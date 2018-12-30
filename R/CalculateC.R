@@ -1,4 +1,6 @@
 
+
+
 CalculateC <- function(a, b, epsAlpha = 1e-07, AlphaHandler = warning) {
   if (is.null(epsAlpha)) 
     return(chol(t(a) %*% a - t(b) %*% b))
@@ -37,9 +39,7 @@ FindAlpha <- function(a, b) {
   bCol <- IndependentCol(b)
   cCol <- aCol | bCol
   if (any(!cCol)) {
-    # common redundant columns removed
-    a <- a[, cCol, drop = FALSE]
-    b <- b[, cCol, drop = FALSE]
+    stop("Problematic collinearity detected. Not handled in this version.")
   }
   ata <- t(a) %*% a
   btb <- t(b) %*% b
