@@ -5,7 +5,7 @@
 \alias{FindAlphaSimple}
 \title{Calculation of alpha}
 \usage{
-FindAlpha(a, b)
+FindAlpha(a, b, tryViaQR = TRUE)
 
 FindAlphaSimple(a, b)
 }
@@ -13,6 +13,9 @@ FindAlphaSimple(a, b)
 \item{a}{matrix E in paper}
 
 \item{b}{matrix Eg in paper}
+
+\item{tryViaQR}{When TRUE QR transformation used (to handle collinearity) 
+when ordinary calculations fail.}
 }
 \value{
 alpha
@@ -23,4 +26,7 @@ Function to find the largest alpha that makes equation 10 in the paper solvable.
 \note{
 FindAlphaSimple performs the calculations by a simple/direct method. 
 FindAlpha is made to handle problematic special cases.
+}
+\seealso{
+See examples in the documentation of \code{\link{CalculateC}}
 }
