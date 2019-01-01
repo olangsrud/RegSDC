@@ -24,19 +24,21 @@ RegSDCaddGen <- function(y, yStart, x = matrix(1, NROW(y), 1), epsAlpha = 1e-07,
   yHatStart <- xQ %*% (t(xQ) %*% yStart)
   A <- y - yHat
   B <- yStart - yHatStart
-  if (is.null(epsAlpha)) 
-    alpha <- 1 else {
-      Mf <- t(A) %*% A %*% solve(t(B) %*% B)
-      alpha <- min(1, sqrt(min(eigen(Mf, only.values = TRUE)$values))/(1 + epsAlpha))  #
-      if (alpha < 1) 
-        AlphaHandler(paste("alpha = ", alpha))
-    }
-  R <- chol(t(A) %*% A - alpha^2 * t(B) %*% B)  # collinear y not treated
+  
+  R <- CalculateC(A, B, epsAlpha = epsAlpha, AlphaHandler = AlphaHandler, alpha = NULL)
+  alpha <- attr(R, "alpha")
+  
   n <- NROW(y)
-  m <- NCOL(y)  # collinear y not treated
+  m <- NROW(R)
   ySim <- matrix(rnorm(n * m), n, m)
   
-  newQ <- GenQR(cbind(xQ, yStart, ySim), findR = FALSE, makeunique = makeunique)[, -seq_len(NCOL(xQ) + m), drop = FALSE]
+  newQ <- GenQR(cbind(xQ, yStart, ySim), findR = FALSE, makeunique = makeunique)
+  
+  nColXQyStart <- NCOL(xQ) + NCOL(yStart)
+  if (NCOL(newQ) < (nColXQyStart + m)) 
+    nColXQyStart <- qr(cbind(xQ, yStart), tol = 1e-07)$rank
+  
+  newQ <- newQ[, -seq_len(nColXQyStart), drop = FALSE]
   
   if (NCOL(newQ) < m) 
     stop("Not enough dimensions")
@@ -46,6 +48,8 @@ RegSDCaddGen <- function(y, yStart, x = matrix(1, NROW(y), 1), epsAlpha = 1e-07,
     attr(yOut, "alpha") <- alpha
   yOut
 }
+
+
 
 #' Regression-based SDC Tools - Synthetic addition with residual correlation control
 #' 
@@ -88,6 +92,21 @@ RegSDCaddGen <- function(y, yStart, x = matrix(1, NROW(y), 1), epsAlpha = 1e-07,
 #' # With yStart as input and alpha limit in use (warning produced)
 #' yOut <- RegSDCadd(y, NULL, x, 2 * y + matrix(rnorm(30), 10, 3))
 #' attr(yOut, "alpha")
+#' 
+#' # Same correlation for all variables
+#' RegSDCadd(y, 0.2, x)
+#' # But in this case RegSDCcomp is equivalent and faster
+#' RegSDCcomp(y, 0.2, x)
+#' 
+#' 
+#' # Make nearly collinear data
+#' y[, 3] <- y[, 1] + y[, 2] + 0.001 * y[, 3]
+#' # Not possible to achieve correlations. Small alpha with warning.
+#' RegSDCadd(y, c(0.1, 0.2, 0.3), x)
+#' # Exact collinear data
+#' y[, 3] <- y[, 1] + y[, 2]
+#' # Zero alpha with warning
+#' RegSDCadd(y, c(0.1, 0.2, 0.3), x)
 RegSDCadd <- function(y, resCorr = NULL, x = matrix(1, NROW(y), 1), yStart = NULL) {
   if (is.null(resCorr)) {
     if (is.null(yStart)) 
