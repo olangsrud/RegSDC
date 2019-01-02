@@ -121,7 +121,7 @@ RegSDCnew <- function(y, yNew, x = matrix(1, NROW(y), 1), doSVD = FALSE) {
 #' @param x Matrix of non-confidential variables (including a constant term (column of ones)) 
 #' @param doSVD SVD when TRUE and QR when FALSE
 #' 
-#' @details doSVD has effect on decomposition of y and yNew. 
+#' @details doSVD has effect on decomposition of y. 
 #' The exact behaviour of the method depends on the choice of the decomposition method because of 
 #' the sequentially phenomenon mentioned in the paper. 
 #' The similarity to the original data will tend to be highest for the first component. 

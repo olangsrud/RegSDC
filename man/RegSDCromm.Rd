@@ -23,7 +23,7 @@ Generated version of y
 Implementation based on equations 11, 12 and 17 in the paper.
 }
 \details{
-doSVD has effect on decomposition of y and yNew. 
+doSVD has effect on decomposition of y. 
 The exact behaviour of the method depends on the choice of the decomposition method because of 
 the sequentially phenomenon mentioned in the paper. 
 The similarity to the original data will tend to be highest for the first component.
