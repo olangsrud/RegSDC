@@ -36,6 +36,7 @@ RegSDCgen <- function(y, x = matrix(1, NROW(y), 1), doSVD = FALSE, yNew = NULL, 
   }
   if (is.finite(lambda)) {
     yNew <- eQR$Q + lambda * yNew
+    doSVD <- FALSE
   }
   eSim <- yNew - xQ %*% (t(xQ) %*% yNew)
   eSimQ <- GenQR(eSim, doSVD = doSVD, findR = FALSE, makeunique = makeunique)
