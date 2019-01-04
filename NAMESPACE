@@ -2,6 +2,8 @@
 
 export(CalculateC)
 export(CalculateCdirect)
+export(EnsureIntercept)
+export(EnsureMatrix)
 export(FindAlpha)
 export(FindAlphaSimple)
 export(GenQR)
