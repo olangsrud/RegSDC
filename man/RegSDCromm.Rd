@@ -5,16 +5,19 @@
 \alias{RegSDCromm}
 \title{Regression-based SDC Tools - Random orthogonal matrix masking (ROMM)}
 \usage{
-RegSDCromm(y, lambda = Inf, x = matrix(1, NROW(y), 1), doSVD = FALSE)
+RegSDCromm(y, lambda = Inf, x = NULL, doSVD = FALSE,
+  ensureIntercept = TRUE)
 }
 \arguments{
 \item{y}{Matrix of confidential variables}
 
 \item{lambda}{ROMM parameter}
 
-\item{x}{Matrix of non-confidential variables (including a constant term (column of ones))}
+\item{x}{Matrix of non-confidential variables}
 
 \item{doSVD}{SVD when TRUE and QR when FALSE}
+
+\item{ensureIntercept}{Whether to ensure/include a constant term. Non-NULL x is subjected to \code{\link{EnsureIntercept}}}
 }
 \value{
 Generated version of y
@@ -26,11 +29,11 @@ Implementation based on equations 11, 12 and 17 in the paper.
 doSVD has effect on decomposition of y. 
 The exact behaviour of the method depends on the choice of the decomposition method because of 
 the sequentially phenomenon mentioned in the paper. 
-The similarity to the original data will tend to be highest for the first component.
+The similarity to the original data will tend to be highest for the first component. 
+Input matrices are subjected to \code{\link{EnsureMatrix}}.
 }
 \examples{
-x1 <- 1:5
-x <- cbind(x0 = 1, x1 = x1)
+x <- matrix(1:5, 5, 1)
 y <- matrix(rnorm(15) + 1:15, 5, 3)
 
 # Same as IPSO (RegSDCipso)

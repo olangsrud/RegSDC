@@ -2,6 +2,7 @@
 #'
 #' @param x NULL or input to as.matrix
 #' @param nRow Expected number of rows
+#' @param nCol Expected number of columns
 #'
 #' @return
 #' @export
@@ -16,13 +17,16 @@
 #' EnsureMatrix(NULL, 4)
 #' try(EnsureMatrix(x, 4))
 #' try(EnsureMatrix(1:3, 4))
-EnsureMatrix <- function(x, nRow = NULL) {
+EnsureMatrix <- function(x, nRow = NULL, nCol = NULL) {
   if (is.null(x)) 
     return(matrix(0, nRow, 0))
   x <- as.matrix(x)
   if (!is.null(nRow)) 
     if (nrow(x) != nRow) 
       stop(paste("nrow is", nrow(x), "when", nRow, "expected"))
+  if (!is.null(nCol)) 
+    if (ncol(x) != nCol) 
+      stop(paste("ncol is", ncol(x), "when", nCol, "expected"))
   x
 }
 

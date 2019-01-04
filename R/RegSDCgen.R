@@ -5,13 +5,14 @@
 #' @encoding UTF8
 #'
 #' @param y Matrix of confidential variables
-#' @param x Matrix of non-confidential variables (including a constant term (column of ones)) 
+#' @param x Matrix of non-confidential variables
 #' @param doSVD SVD when TRUE and QR when FALSE
 #' @param yNew Matrix of y-data for new scores (simulated when NULL)
 #' @param lambda ROMM parameter
 #' @param makeunique Parameter to be used in GenQR 
+#' @param ensureIntercept Whether to ensure/include a constant term. Non-NULL x is subjected to \code{\link{EnsureIntercept}}
 #' 
-#' @details doSVD has effect on decomposition of y and yNew  
+#' @details doSVD has effect on decomposition of y and yNew. Input matrices are subjected to \code{\link{EnsureMatrix}}.
 #' 
 #' @return Generated version of y
 #' @keywords internal
@@ -23,7 +24,11 @@
 #' RegSDCgen(exY)
 #' RegSDCgen(exY, yNew = exY + 0.001 * matrix(rnorm(15), 5, 3))  # Close to exY
 #' RegSDCgen(exY, lambda = 0.001)  # Close to exY
-RegSDCgen <- function(y, x = matrix(1, NROW(y), 1), doSVD = FALSE, yNew = NULL, lambda = Inf, makeunique = TRUE) {
+RegSDCgen <- function(y, x = NULL, doSVD = FALSE, yNew = NULL, lambda = Inf, makeunique = TRUE, ensureIntercept = TRUE) {
+  y <- EnsureMatrix(y)
+  x <- EnsureMatrix(x, nrow(y))
+  if(ensureIntercept)
+    x <- EnsureIntercept(x)
   xQ <- GenQR(x, findR = FALSE)
   yHat <- xQ %*% (t(xQ) %*% y)
   # makeunique <- !is.null(yNew)
@@ -33,7 +38,8 @@ RegSDCgen <- function(y, x = matrix(1, NROW(y), 1), doSVD = FALSE, yNew = NULL, 
   if (is.null(yNew)) {
     yNew <- matrix(rnorm(n * m), n, m)
     doSVD <- FALSE
-  }
+  } else
+    yNew <- EnsureMatrix(yNew, nrow(y)) # ncol is not checked and could be different 
   if (is.finite(lambda)) {
     yNew <- eQR$Q + lambda * yNew
     doSVD <- FALSE
@@ -54,26 +60,28 @@ RegSDCgen <- function(y, x = matrix(1, NROW(y), 1), doSVD = FALSE, yNew = NULL, 
 #' @encoding UTF8
 #'
 #' @param y Matrix of confidential variables
-#' @param x Matrix of non-confidential variables (including a constant term (column of ones)) 
+#' @param x Matrix of non-confidential variables
+#' @param ensureIntercept Whether to ensure/include a constant term. Non-NULL x is subjected to \code{\link{EnsureIntercept}}
+#' 
+#' @details Input matrices are subjected to \code{\link{EnsureMatrix}}.
 #' 
 #' @return Generated version of y
 #' @export
 #'
 #' @examples
-#' x1 <- 1:5
-#' x <- cbind(x0 = 1, x1 = x1)
+#' x <- matrix(1:5, 5, 1)
 #' y <- matrix(rnorm(15) + 1:15, 5, 3)
 #' ySynth <- RegSDCipso(y, x)
 #' 
 #' # Identical regression results
-#' summary(lm(y[, 1] ~ x1))
-#' summary(lm(ySynth[, 1] ~ x1))
+#' summary(lm(y[, 1] ~ x))
+#' summary(lm(ySynth[, 1] ~ x))
 #' 
 #' # Identical covariance matrices
 #' cov(y) - cov(ySynth)
-#' cov(residuals(lm(y ~ x1))) - cov(residuals(lm(ySynth ~ x1)))
-RegSDCipso <- function(y, x = matrix(1, NROW(y), 1)) {
-  RegSDCgen(y = y, x = x)
+#' cov(residuals(lm(y ~ x))) - cov(residuals(lm(ySynth ~ x)))
+RegSDCipso <- function(y, x = NULL, ensureIntercept = TRUE) {
+  RegSDCgen(y = y, x = x, ensureIntercept = ensureIntercept)
 }
 
 
@@ -86,17 +94,17 @@ RegSDCipso <- function(y, x = matrix(1, NROW(y), 1)) {
 #'
 #' @param y Matrix of confidential variables
 #' @param yNew Matrix of y-data for new scores 
-#' @param x Matrix of non-confidential variables (including a constant term (column of ones)) 
+#' @param x Matrix of non-confidential variables
 #' @param doSVD SVD when TRUE and QR when FALSE
+#' @param ensureIntercept Whether to ensure/include a constant term. Non-NULL x is subjected to \code{\link{EnsureIntercept}}
 #' 
-#' @details doSVD has effect on decomposition of y and yNew  
+#' @details doSVD has effect on decomposition of y and yNew. Input matrices are subjected to \code{\link{EnsureMatrix}}.  
 #' 
 #' @return Generated version of y
 #' @export
 #'
 #' @examples
-#' x1 <- 1:5
-#' x <- cbind(x0 = 1, x1 = x1)
+#' x <- matrix(1:5, 5, 1)
 #' y <- matrix(rnorm(15) + 1:15, 5, 3)
 #' 
 #' # Same as IPSO (RegSDCipso)
@@ -104,9 +112,8 @@ RegSDCipso <- function(y, x = matrix(1, NROW(y), 1)) {
 #' 
 #' # Close to y
 #' RegSDCnew(y, y + 0.001 * matrix(rnorm(15), 5, 3), x)
-#' 
-RegSDCnew <- function(y, yNew, x = matrix(1, NROW(y), 1), doSVD = FALSE) {
-  RegSDCgen(y = y, x = x, doSVD =doSVD, yNew = yNew)
+RegSDCnew <- function(y, yNew, x = NULL, doSVD = FALSE, ensureIntercept = TRUE) {
+  RegSDCgen(y = y, x = x, doSVD =doSVD, yNew = yNew, ensureIntercept = ensureIntercept)
 }
 
 
@@ -118,20 +125,21 @@ RegSDCnew <- function(y, yNew, x = matrix(1, NROW(y), 1), doSVD = FALSE) {
 #'
 #' @param y Matrix of confidential variables
 #' @param lambda ROMM parameter
-#' @param x Matrix of non-confidential variables (including a constant term (column of ones)) 
+#' @param x Matrix of non-confidential variables
 #' @param doSVD SVD when TRUE and QR when FALSE
+#' @param ensureIntercept Whether to ensure/include a constant term. Non-NULL x is subjected to \code{\link{EnsureIntercept}}
 #' 
 #' @details doSVD has effect on decomposition of y. 
 #' The exact behaviour of the method depends on the choice of the decomposition method because of 
 #' the sequentially phenomenon mentioned in the paper. 
 #' The similarity to the original data will tend to be highest for the first component. 
+#' Input matrices are subjected to \code{\link{EnsureMatrix}}.
 #' 
 #' @return Generated version of y
 #' @export
 #'
 #' @examples
-#' x1 <- 1:5
-#' x <- cbind(x0 = 1, x1 = x1)
+#' x <- matrix(1:5, 5, 1)
 #' y <- matrix(rnorm(15) + 1:15, 5, 3)
 #' 
 #' # Same as IPSO (RegSDCipso)
@@ -142,7 +150,7 @@ RegSDCnew <- function(y, yNew, x = matrix(1, NROW(y), 1), doSVD = FALSE) {
 #' 
 #' # Close to y
 #' RegSDCromm(y, 0.001, x)
-RegSDCromm <- function(y, lambda = Inf, x = matrix(1, NROW(y), 1), doSVD = FALSE) {
-  RegSDCgen(y = y, x = x, doSVD =doSVD, lambda = lambda)
+RegSDCromm <- function(y, lambda = Inf, x = NULL, doSVD = FALSE, ensureIntercept = TRUE) {
+  RegSDCgen(y = y, x = x, doSVD =doSVD, lambda = lambda, ensureIntercept = ensureIntercept)
 }
 

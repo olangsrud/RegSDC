@@ -5,13 +5,13 @@
 \alias{RegSDCgen}
 \title{Regression-based SDC Tools - General data generation}
 \usage{
-RegSDCgen(y, x = matrix(1, NROW(y), 1), doSVD = FALSE, yNew = NULL,
-  lambda = Inf, makeunique = TRUE)
+RegSDCgen(y, x = NULL, doSVD = FALSE, yNew = NULL, lambda = Inf,
+  makeunique = TRUE, ensureIntercept = TRUE)
 }
 \arguments{
 \item{y}{Matrix of confidential variables}
 
-\item{x}{Matrix of non-confidential variables (including a constant term (column of ones))}
+\item{x}{Matrix of non-confidential variables}
 
 \item{doSVD}{SVD when TRUE and QR when FALSE}
 
@@ -20,6 +20,8 @@ RegSDCgen(y, x = matrix(1, NROW(y), 1), doSVD = FALSE, yNew = NULL,
 \item{lambda}{ROMM parameter}
 
 \item{makeunique}{Parameter to be used in GenQR}
+
+\item{ensureIntercept}{Whether to ensure/include a constant term. Non-NULL x is subjected to \code{\link{EnsureIntercept}}}
 }
 \value{
 Generated version of y
@@ -28,7 +30,7 @@ Generated version of y
 IPSO by QR or SVD, scores from arbitrary data, and ROMM
 }
 \details{
-doSVD has effect on decomposition of y and yNew
+doSVD has effect on decomposition of y and yNew. Input matrices are subjected to \code{\link{EnsureMatrix}}.
 }
 \examples{
 exY <- matrix(rnorm(15), 5, 3)

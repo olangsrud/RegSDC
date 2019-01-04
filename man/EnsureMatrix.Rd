@@ -4,12 +4,14 @@
 \alias{EnsureMatrix}
 \title{Ensure that input is matrix and check number of rows}
 \usage{
-EnsureMatrix(x, nRow = NULL)
+EnsureMatrix(x, nRow = NULL, nCol = NULL)
 }
 \arguments{
 \item{x}{NULL or input to as.matrix}
 
 \item{nRow}{Expected number of rows}
+
+\item{nCol}{Expected number of columns}
 }
 \description{
 Ensure that input is matrix and check number of rows

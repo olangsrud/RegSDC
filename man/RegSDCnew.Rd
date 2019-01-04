@@ -5,16 +5,18 @@
 \alias{RegSDCnew}
 \title{Regression-based SDC Tools - Scores from new data}
 \usage{
-RegSDCnew(y, yNew, x = matrix(1, NROW(y), 1), doSVD = FALSE)
+RegSDCnew(y, yNew, x = NULL, doSVD = FALSE, ensureIntercept = TRUE)
 }
 \arguments{
 \item{y}{Matrix of confidential variables}
 
 \item{yNew}{Matrix of y-data for new scores}
 
-\item{x}{Matrix of non-confidential variables (including a constant term (column of ones))}
+\item{x}{Matrix of non-confidential variables}
 
 \item{doSVD}{SVD when TRUE and QR when FALSE}
+
+\item{ensureIntercept}{Whether to ensure/include a constant term. Non-NULL x is subjected to \code{\link{EnsureIntercept}}}
 }
 \value{
 Generated version of y
@@ -23,11 +25,10 @@ Generated version of y
 Implementation of equation 12 in the paper.
 }
 \details{
-doSVD has effect on decomposition of y and yNew
+doSVD has effect on decomposition of y and yNew. Input matrices are subjected to \code{\link{EnsureMatrix}}.
 }
 \examples{
-x1 <- 1:5
-x <- cbind(x0 = 1, x1 = x1)
+x <- matrix(1:5, 5, 1)
 y <- matrix(rnorm(15) + 1:15, 5, 3)
 
 # Same as IPSO (RegSDCipso)
@@ -35,5 +36,4 @@ RegSDCnew(y, matrix(rnorm(15), 5, 3), x)
 
 # Close to y
 RegSDCnew(y, y + 0.001 * matrix(rnorm(15), 5, 3), x)
-
 }

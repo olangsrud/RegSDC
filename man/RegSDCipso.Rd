@@ -5,12 +5,14 @@
 \alias{RegSDCipso}
 \title{Regression-based SDC Tools - Ordinary synthetic data (IPSO)}
 \usage{
-RegSDCipso(y, x = matrix(1, NROW(y), 1))
+RegSDCipso(y, x = NULL, ensureIntercept = TRUE)
 }
 \arguments{
 \item{y}{Matrix of confidential variables}
 
-\item{x}{Matrix of non-confidential variables (including a constant term (column of ones))}
+\item{x}{Matrix of non-confidential variables}
+
+\item{ensureIntercept}{Whether to ensure/include a constant term. Non-NULL x is subjected to \code{\link{EnsureIntercept}}}
 }
 \value{
 Generated version of y
@@ -18,17 +20,19 @@ Generated version of y
 \description{
 Implementation of equation 4 in the paper.
 }
+\details{
+Input matrices are subjected to \code{\link{EnsureMatrix}}.
+}
 \examples{
-x1 <- 1:5
-x <- cbind(x0 = 1, x1 = x1)
+x <- matrix(1:5, 5, 1)
 y <- matrix(rnorm(15) + 1:15, 5, 3)
 ySynth <- RegSDCipso(y, x)
 
 # Identical regression results
-summary(lm(y[, 1] ~ x1))
-summary(lm(ySynth[, 1] ~ x1))
+summary(lm(y[, 1] ~ x))
+summary(lm(ySynth[, 1] ~ x))
 
 # Identical covariance matrices
 cov(y) - cov(ySynth)
-cov(residuals(lm(y ~ x1))) - cov(residuals(lm(ySynth ~ x1)))
+cov(residuals(lm(y ~ x))) - cov(residuals(lm(ySynth ~ x)))
 }
