@@ -7,18 +7,25 @@
 #'
 #' @param y Matrix of confidential variables
 #' @param yStart Arbitrary data whose residuals will be used
-#' @param x Matrix of non-confidential variables (including a constant term (column of ones)) 
+#' @param x Matrix of non-confidential variables
 #' @param epsAlpha Precision constant for alpha calculation 
 #' @param AlphaHandler Function (warning or stop) to be used when alpha<1 
 #' @param alphaAttr When TRUE alpha is attribute in output 
 #' @param makeunique Parameter to be used in GenQR
+#' @param ensureIntercept Whether to ensure/include a constant term. Non-NULL x is subjected to \code{\link{EnsureIntercept}}
 #' 
-#' @details  Use epsAlpha=NULL to avoid calculation of alpha. Use of alpha (<1) will produce a warning. 
+#' @details  Use epsAlpha=NULL to avoid calculation of alpha. Use of alpha (<1) will produce a warning. Input matrices are subjected to \code{\link{EnsureMatrix}}.
 #' 
 #' @return Generated version of y
 #' @keywords internal
 #' @export
-RegSDCaddGen <- function(y, yStart, x = matrix(1, NROW(y), 1), epsAlpha = 1e-07, AlphaHandler = warning, alphaAttr = TRUE, makeunique = TRUE) {
+RegSDCaddGen <- function(y, yStart, x = NULL, epsAlpha = 1e-07, AlphaHandler = warning, alphaAttr = TRUE, makeunique = TRUE, ensureIntercept = TRUE) {
+  y <- EnsureMatrix(y)
+  yStart <- EnsureMatrix(yStart, nrow(y), ncol(y))
+  x <- EnsureMatrix(x, nrow(y))
+  if(ensureIntercept)
+    x <- EnsureIntercept(x)
+  
   xQ <- GenQR(x, doSVD = FALSE, findR = FALSE)
   yHat <- xQ %*% (t(xQ) %*% y)
   yHatStart <- xQ %*% (t(xQ) %*% yStart)
@@ -62,29 +69,29 @@ RegSDCaddGen <- function(y, yStart, x = matrix(1, NROW(y), 1), epsAlpha = 1e-07,
 #'
 #' @param y Matrix of confidential variables
 #' @param resCorr  Required residual correlations (possibly recycled)
-#' @param x Matrix of non-confidential variables (including a constant term (column of ones)) 
+#' @param x Matrix of non-confidential variables 
 #' @param yStart Arbitrary data whose residuals will be used. Will be calculated from resCorr when NULL.
+#' @param ensureIntercept Whether to ensure/include a constant term. Non-NULL x is subjected to \code{\link{EnsureIntercept}}
 #' 
-#' @details  Use epsAlpha=NULL to avoid calculation of alpha. Use of alpha (<1) will produce a warning. 
+#' @details  Use epsAlpha=NULL to avoid calculation of alpha. Use of alpha (<1) will produce a warning. Input matrices are subjected to \code{\link{EnsureMatrix}}.
 #' 
 #' @return Generated version of y with alpha as attribute
 #' @export
 #' @examples
-#' x1 <- 1:10
-#' x <- cbind(x0 = 1, x1 = x1)
+#' x <- matrix(1:10, 10, 1)
 #' y <- matrix(rnorm(30) + 1:30, 10, 3)
 #' yOut <- RegSDCadd(y, c(0.1, 0.2, 0.3), x)
 #' 
 #' # Correlations between residuals as required
-#' diag(cor(residuals(lm(y ~ x1)), residuals(lm(yOut ~ x1))))
+#' diag(cor(residuals(lm(y ~ x)), residuals(lm(yOut ~ x))))
 #' 
 #' # Identical covariance matrices
 #' cov(y) - cov(yOut)
-#' cov(residuals(lm(y ~ x1))) - cov(residuals(lm(yOut ~ x1)))
+#' cov(residuals(lm(y ~ x))) - cov(residuals(lm(yOut ~ x)))
 #' 
 #' # Identical regression results
-#' summary(lm(y[, 1] ~ x1))
-#' summary(lm(yOut[, 1] ~ x1))
+#' summary(lm(y[, 1] ~ x))
+#' summary(lm(yOut[, 1] ~ x))
 #' 
 #' # alpha as attribute
 #' attr(yOut, "alpha")
@@ -107,7 +114,8 @@ RegSDCaddGen <- function(y, yStart, x = matrix(1, NROW(y), 1), epsAlpha = 1e-07,
 #' y[, 3] <- y[, 1] + y[, 2]
 #' # Zero alpha with warning
 #' RegSDCadd(y, c(0.1, 0.2, 0.3), x)
-RegSDCadd <- function(y, resCorr = NULL, x = matrix(1, NROW(y), 1), yStart = NULL) {
+RegSDCadd <- function(y, resCorr = NULL, x = NULL, yStart = NULL, ensureIntercept = TRUE) {
+  y <- EnsureMatrix(y)
   if (is.null(resCorr)) {
     if (is.null(yStart)) 
       stop("resCorr or yStart must be supplied")
@@ -117,7 +125,7 @@ RegSDCadd <- function(y, resCorr = NULL, x = matrix(1, NROW(y), 1), yStart = NUL
     resCorr <- rep_len(resCorr, NCOL(y))
     yStart <- outer(rep(1, NROW(y)), resCorr) * y
   }
-  RegSDCaddGen(y, yStart, x)
+  RegSDCaddGen(y, yStart, x, ensureIntercept = ensureIntercept)
 }
 
 

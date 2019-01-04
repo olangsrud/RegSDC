@@ -1,7 +1,7 @@
 Package: RegSDC
 Type: Package
 Title: Information Preserving Regression-based Tools for Statistical Disclosure Control
-Version: 0.1.1
+Version: 0.1.2
 Date: 2019-01-04
 Author: Øyvind Langsrud
 Maintainer: Øyvind Langsrud <oyl@ssb.no>

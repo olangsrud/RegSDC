@@ -5,19 +5,21 @@
 \alias{RegSDCcomp}
 \title{Regression-based SDC Tools - Component score correlation control}
 \usage{
-RegSDCcomp(y, compCorr = NA, x = matrix(1, NROW(y), 1),
-  doSVD = FALSE, makeunique = TRUE)
+RegSDCcomp(y, compCorr = NA, x = NULL, doSVD = FALSE,
+  makeunique = TRUE, ensureIntercept = TRUE)
 }
 \arguments{
 \item{y}{Matrix of confidential variables}
 
 \item{compCorr}{Required component score  correlations (possibly recycled)}
 
-\item{x}{Matrix of non-confidential variables (including a constant term (column of ones))}
+\item{x}{Matrix of non-confidential variables}
 
 \item{doSVD}{SVD when TRUE and QR when FALSE}
 
 \item{makeunique}{Parameter to be used in GenQR}
+
+\item{ensureIntercept}{Whether to ensure/include a constant term. Non-NULL x is subjected to \code{\link{EnsureIntercept}}}
 }
 \value{
 Generated version of y
@@ -26,11 +28,10 @@ Generated version of y
 Implementation of equation 8 in the paper.
 }
 \details{
-NA component score  correlation means independent random
+NA component score correlation means independent random. Input matrices are subjected to \code{\link{EnsureMatrix}}.
 }
 \examples{
-x1 <- 1:10
-x <- cbind(x0 = 1, x1 = x1)
+x <- matrix(1:10, 10, 1)
 y <- matrix(rnorm(30) + 1:30, 10, 3)
 
 # Same as IPSO (RegSDCipso)
@@ -41,9 +42,9 @@ yQR <- RegSDCcomp(y, c(0.1, 0.2, NA), x)
 ySVD <- RegSDCcomp(y, c(0.1, 0.2, NA), x, doSVD = TRUE)
 
 # Calculation of residuals
-r <- residuals(lm(y ~ x1))
-rQR <- residuals(lm(yQR ~ x1))
-rSVD <- residuals(lm(ySVD ~ x1))
+r <- residuals(lm(y ~ x))
+rQR <- residuals(lm(yQR ~ x))
+rSVD <- residuals(lm(ySVD ~ x))
 
 # Correlations for two first components as required
 diag(cor(GenQR(r)$Q, GenQR(rQR)$Q))
@@ -54,7 +55,7 @@ cov(yQR) - cov(ySVD)
 cov(rQR) - cov(rSVD)
 
 # Identical regression results
-summary(lm(y[, 1] ~ x1))
-summary(lm(yQR[, 1] ~ x1))
-summary(lm(ySVD[, 1] ~ x1))
+summary(lm(y[, 1] ~ x))
+summary(lm(yQR[, 1] ~ x))
+summary(lm(ySVD[, 1] ~ x))
 }

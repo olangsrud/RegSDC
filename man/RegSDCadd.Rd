@@ -5,17 +5,19 @@
 \alias{RegSDCadd}
 \title{Regression-based SDC Tools - Synthetic addition with residual correlation control}
 \usage{
-RegSDCadd(y, resCorr = NULL, x = matrix(1, NROW(y), 1),
-  yStart = NULL)
+RegSDCadd(y, resCorr = NULL, x = NULL, yStart = NULL,
+  ensureIntercept = TRUE)
 }
 \arguments{
 \item{y}{Matrix of confidential variables}
 
 \item{resCorr}{Required residual correlations (possibly recycled)}
 
-\item{x}{Matrix of non-confidential variables (including a constant term (column of ones))}
+\item{x}{Matrix of non-confidential variables}
 
 \item{yStart}{Arbitrary data whose residuals will be used. Will be calculated from resCorr when NULL.}
+
+\item{ensureIntercept}{Whether to ensure/include a constant term. Non-NULL x is subjected to \code{\link{EnsureIntercept}}}
 }
 \value{
 Generated version of y with alpha as attribute
@@ -26,24 +28,23 @@ The alpha limit is calculated (equation 9). The limit is used when alpha =1 cann
 In output, alpha is attribute.
 }
 \details{
-Use epsAlpha=NULL to avoid calculation of alpha. Use of alpha (<1) will produce a warning.
+Use epsAlpha=NULL to avoid calculation of alpha. Use of alpha (<1) will produce a warning. Input matrices are subjected to \code{\link{EnsureMatrix}}.
 }
 \examples{
-x1 <- 1:10
-x <- cbind(x0 = 1, x1 = x1)
+x <- matrix(1:10, 10, 1)
 y <- matrix(rnorm(30) + 1:30, 10, 3)
 yOut <- RegSDCadd(y, c(0.1, 0.2, 0.3), x)
 
 # Correlations between residuals as required
-diag(cor(residuals(lm(y ~ x1)), residuals(lm(yOut ~ x1))))
+diag(cor(residuals(lm(y ~ x)), residuals(lm(yOut ~ x))))
 
 # Identical covariance matrices
 cov(y) - cov(yOut)
-cov(residuals(lm(y ~ x1))) - cov(residuals(lm(yOut ~ x1)))
+cov(residuals(lm(y ~ x))) - cov(residuals(lm(yOut ~ x)))
 
 # Identical regression results
-summary(lm(y[, 1] ~ x1))
-summary(lm(yOut[, 1] ~ x1))
+summary(lm(y[, 1] ~ x))
+summary(lm(yOut[, 1] ~ x))
 
 # alpha as attribute
 attr(yOut, "alpha")

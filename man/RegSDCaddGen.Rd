@@ -5,15 +5,16 @@
 \alias{RegSDCaddGen}
 \title{Regression-based SDC Tools - Synthetic addition}
 \usage{
-RegSDCaddGen(y, yStart, x = matrix(1, NROW(y), 1), epsAlpha = 1e-07,
-  AlphaHandler = warning, alphaAttr = TRUE, makeunique = TRUE)
+RegSDCaddGen(y, yStart, x = NULL, epsAlpha = 1e-07,
+  AlphaHandler = warning, alphaAttr = TRUE, makeunique = TRUE,
+  ensureIntercept = TRUE)
 }
 \arguments{
 \item{y}{Matrix of confidential variables}
 
 \item{yStart}{Arbitrary data whose residuals will be used}
 
-\item{x}{Matrix of non-confidential variables (including a constant term (column of ones))}
+\item{x}{Matrix of non-confidential variables}
 
 \item{epsAlpha}{Precision constant for alpha calculation}
 
@@ -22,6 +23,8 @@ RegSDCaddGen(y, yStart, x = matrix(1, NROW(y), 1), epsAlpha = 1e-07,
 \item{alphaAttr}{When TRUE alpha is attribute in output}
 
 \item{makeunique}{Parameter to be used in GenQR}
+
+\item{ensureIntercept}{Whether to ensure/include a constant term. Non-NULL x is subjected to \code{\link{EnsureIntercept}}}
 }
 \value{
 Generated version of y
@@ -30,6 +33,6 @@ Generated version of y
 Residuals from arbitrary data with a synthetic addition
 }
 \details{
-Use epsAlpha=NULL to avoid calculation of alpha. Use of alpha (<1) will produce a warning.
+Use epsAlpha=NULL to avoid calculation of alpha. Use of alpha (<1) will produce a warning. Input matrices are subjected to \code{\link{EnsureMatrix}}.
 }
 \keyword{internal}

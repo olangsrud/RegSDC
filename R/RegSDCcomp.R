@@ -6,18 +6,19 @@
 #'
 #' @param y Matrix of confidential variables
 #' @param compCorr Required component score  correlations (possibly recycled)
-#' @param x Matrix of non-confidential variables (including a constant term (column of ones)) 
+#' @param x Matrix of non-confidential variables
 #' @param doSVD SVD when TRUE and QR when FALSE
 #' @param makeunique Parameter to be used in GenQR
+#' @param ensureIntercept Whether to ensure/include a constant term. Non-NULL x is subjected to \code{\link{EnsureIntercept}}
 #' 
-#' @details NA component score  correlation means independent random
+#' @details NA component score correlation means independent random. Input matrices are subjected to \code{\link{EnsureMatrix}}.
+#' 
 #'
 #' @return Generated version of y
 #' @export
 #'
 #' @examples
-#' x1 <- 1:10
-#' x <- cbind(x0 = 1, x1 = x1)
+#' x <- matrix(1:10, 10, 1)
 #' y <- matrix(rnorm(30) + 1:30, 10, 3)
 #' 
 #' # Same as IPSO (RegSDCipso)
@@ -28,9 +29,9 @@
 #' ySVD <- RegSDCcomp(y, c(0.1, 0.2, NA), x, doSVD = TRUE)
 #' 
 #' # Calculation of residuals
-#' r <- residuals(lm(y ~ x1))
-#' rQR <- residuals(lm(yQR ~ x1))
-#' rSVD <- residuals(lm(ySVD ~ x1))
+#' r <- residuals(lm(y ~ x))
+#' rQR <- residuals(lm(yQR ~ x))
+#' rSVD <- residuals(lm(ySVD ~ x))
 #' 
 #' # Correlations for two first components as required
 #' diag(cor(GenQR(r)$Q, GenQR(rQR)$Q))
@@ -41,10 +42,14 @@
 #' cov(rQR) - cov(rSVD)
 #' 
 #' # Identical regression results
-#' summary(lm(y[, 1] ~ x1))
-#' summary(lm(yQR[, 1] ~ x1))
-#' summary(lm(ySVD[, 1] ~ x1))
-RegSDCcomp <- function(y, compCorr = NA, x = matrix(1, NROW(y), 1), doSVD = FALSE, makeunique = TRUE) {
+#' summary(lm(y[, 1] ~ x))
+#' summary(lm(yQR[, 1] ~ x))
+#' summary(lm(ySVD[, 1] ~ x))
+RegSDCcomp <- function(y, compCorr = NA, x = NULL, doSVD = FALSE, makeunique = TRUE, ensureIntercept = TRUE) {
+  y <- EnsureMatrix(y)
+  x <- EnsureMatrix(x, nrow(y))
+  if(ensureIntercept)
+    x <- EnsureIntercept(x)
   xQ <- GenQR(x, doSVD = doSVD, findR = FALSE)
   yHat <- xQ %*% (t(xQ) %*% y)
   eQR <- GenQR(y - yHat, doSVD = doSVD, makeunique = makeunique)
