@@ -150,4 +150,35 @@ cov(resid(lmy)[clust == "c2", ]) - cov(resid(lmc)[clust == "c2", ])
 # results are different from modification (a) above
 coef(lmc)
 coef(lm(zc ~ clust + x1:clust + x2:clust + x3:clust))
+
+
+####################################################
+# Make groups of clusters (d) and cluster pieces (e)
+####################################################
+clustGr <- paste("gr", ceiling(rep(1:3, each = 10)/2 + 0.1), sep = "")
+clustP <- c("a", "a", rep("b", 28))
+
+######## Modifications (c), (d) and (e)
+zGrP <- RegSDChybrid(y, clusters = clust, clusterPieces = clustP, groupedClusters = clustGr,
+                     xLocal = x3, xGroupedClusters = x2, xGlobal = x1, alternative = "c")
+
+# Corresponding models by lm
+lmGrP <- lm(zGrP ~ clust:clustP + x1 + x2:clustGr + x3:clust - 1)
+lmY <- lm(y ~ clust:clustP + x1 + x2:clustGr + x3:clust - 1)
+
+# Preserved regression coef
+coef(lmY) - coef(lmGrP)
+
+# Identical means within cluster pieces
+aggregate(y, list(clust = clust, clustP = clustP), mean)
+aggregate(zGrP, list(clust = clust, clustP = clustP), mean)
+
+# Covariance matrix preserved
+cov(resid(lmY)) - cov(resid(lmGrP))
+
+# Covariance matrices preserved within clusters
+cov(resid(lmY)[clust == "c2", ]) - cov(resid(lmGrP)[clust == "c2", ])
+
+# Covariance matrices not preserved within cluster pieces
+cov(resid(lmY)[clustP == "a", ]) - cov(resid(lmGrP)[clustP == "a", ])
 }
