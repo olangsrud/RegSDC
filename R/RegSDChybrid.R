@@ -59,6 +59,10 @@ AdjustQR <- function(y, x = NULL, xOrth = GenQR(x, findR = FALSE), ...) {
 #'        y1 and y2 (fitted),    e3s and e4s (new residuals),   e3 and e4 (original residuals) 
 #' @param epsAlpha Precision constant for alpha calculation
 #' @param makeunique  Parameter to be used in GenQR
+#' 
+#' @details Input matrices are subjected to \code{\link{EnsureMatrix}}.
+#' Necessary constant terms (intercept) are automatically included. 
+#' That is, a column of ones is not needed in the input matrices.
 #'
 #' 
 #' @return Generated version of y
@@ -325,6 +329,8 @@ RegSDChybrid <- function(y, clusters = NULL, xLocal = NULL, xGlobal = NULL, clus
           if (alternative == "c") {
             cAlpha <- FindAlpha(eHat[k, , drop = FALSE], eHatStar3[k, , drop = FALSE])
             newAlpha <- min(cAlpha/(1 + epsAlpha), newAlpha)
+            if(newAlpha < epsAlpha)
+              newAlpha <- 0
             cat("\n ", sprintf("%15s: clusterAlpha = %7.3f, Alpha = %4.3f", clust, cAlpha, newAlpha))
           } else {
             R4 <- CalculateC(a = eHat[k, , drop = FALSE], b = eHatStar3[k, , drop = FALSE], epsAlpha = epsAlpha, alpha = alpha)
@@ -338,10 +344,12 @@ RegSDChybrid <- function(y, clusters = NULL, xLocal = NULL, xGlobal = NULL, clus
         eHatStar4[k, ] <- Q4 %*% R4
       }
     }
-    if (alternative == "c") 
+    if (alternative == "c"){ 
+      cat("\n")
       return(RegSDChybrid(y = y, xGlobal = xGlobal, xLocal = xLocal, clusters = clusters, 
                           clusterPieces = clusterPieces, xClusterPieces = xClusterPieces, # groupedClusters already taken care of
                           alpha = newAlpha, ySim = ySim, returnParts = returnParts))
+      }
     eHatStar3 <- alpha * eHatStar3
   }
   if (returnParts) 

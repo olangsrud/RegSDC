@@ -1,4 +1,4 @@
-#' Ensure that input is matrix and check number of rows 
+#' Ensure that input is matrix (by as.matrix) and check number of rows (and columns)
 #'
 #' @param x NULL or input to as.matrix
 #' @param nRow Expected number of rows
@@ -17,9 +17,16 @@
 #' EnsureMatrix(NULL, 4)
 #' try(EnsureMatrix(x, 4))
 #' try(EnsureMatrix(1:3, 4))
+#' EnsureMatrix(x, 3, 2)
+#' try(EnsureMatrix(x, 3, 3))
+#' try(EnsureMatrix(NULL, 3, 3))
 EnsureMatrix <- function(x, nRow = NULL, nCol = NULL) {
-  if (is.null(x)) 
+  if (is.null(x)) {
+    if(!is.null(nCol))
+      if(nCol)
+        stop("nCol not allowed when x is NULL")
     return(matrix(0, nRow, 0))
+  }
   x <- as.matrix(x)
   if (!is.null(nRow)) 
     if (nrow(x) != nRow) 

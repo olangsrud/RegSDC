@@ -2,7 +2,7 @@
 % Please edit documentation in R/EnsureIntercept.R
 \name{EnsureMatrix}
 \alias{EnsureMatrix}
-\title{Ensure that input is matrix and check number of rows}
+\title{Ensure that input is matrix (by as.matrix) and check number of rows (and columns)}
 \usage{
 EnsureMatrix(x, nRow = NULL, nCol = NULL)
 }
@@ -14,7 +14,7 @@ EnsureMatrix(x, nRow = NULL, nCol = NULL)
 \item{nCol}{Expected number of columns}
 }
 \description{
-Ensure that input is matrix and check number of rows
+Ensure that input is matrix (by as.matrix) and check number of rows (and columns)
 }
 \examples{
 x <- matrix(c(5, 8, 4, 2, 7, 6), 3, 2)
@@ -25,5 +25,8 @@ EnsureMatrix(1:4, 4)
 EnsureMatrix(NULL, 4)
 try(EnsureMatrix(x, 4))
 try(EnsureMatrix(1:3, 4))
+EnsureMatrix(x, 3, 2)
+try(EnsureMatrix(x, 3, 3))
+try(EnsureMatrix(NULL, 3, 3))
 }
 \keyword{internal}

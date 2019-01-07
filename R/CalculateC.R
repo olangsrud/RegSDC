@@ -21,11 +21,10 @@
 #' @export
 #'
 #' @examples
-#' x1 <- 1:10
-#' x <- cbind(x0 = 1, x1 = x1)
+#' x <- 1:10
 #' y <- matrix(rnorm(30) + 1:30, 10, 3)
-#' a <- residuals(lm(y ~ x1))
-#' b <- residuals(lm(2 * y + matrix(rnorm(30), 10, 3) ~ x1))
+#' a <- residuals(lm(y ~ x))
+#' b <- residuals(lm(2 * y + matrix(rnorm(30), 10, 3) ~ x))
 #' 
 #' a1 <- a
 #' b1 <- b
@@ -48,7 +47,7 @@
 #' CalculateC(b, a, returnAlpha = TRUE)  # 1 returned (not same as above)
 #' CalculateC(b, a)
 #' 
-#' FindAlpha(b1, a)
+#' FindAlpha(b1, a)   # alpha smaller than epsAlpha is set to 0 in CalculateC
 #' CalculateC(b1, a)  # When alpha = 0 C is calculated by GenQR insetad of chol
 CalculateCdirect <- function(a, b, epsAlpha = 1e-07, AlphaHandler = warning, alpha = NULL) {
   if (is.null(alpha)) {
@@ -60,6 +59,8 @@ CalculateCdirect <- function(a, b, epsAlpha = 1e-07, AlphaHandler = warning, alp
       return(matrixC)
     }
     alpha <- min(1, FindAlpha(a, b)/(1 + epsAlpha))
+    if(alpha < epsAlpha)
+      alpha <- 0
     if (alpha < 1) 
       AlphaHandler(paste("alpha = ", alpha))
   }

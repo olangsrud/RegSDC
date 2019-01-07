@@ -47,6 +47,11 @@ Generated version of y
 \description{
 Implementation of the methodology in section 6 in the paper
 }
+\details{
+Input matrices are subjected to \code{\link{EnsureMatrix}}.
+Necessary constant terms (intercept) are automatically included. 
+That is, a column of ones is not needed in the input matrices.
+}
 \examples{
 #################################################
 # Generate example data for introductory examples
