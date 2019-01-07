@@ -104,6 +104,8 @@ CalculateC <- function(a, b, ..., viaQR = NULL, returnAlpha = FALSE) {
   z <- try(CalculateC(a, b, ..., viaQR = TRUE, returnAlpha = returnAlpha), silent = TRUE)
   if (!inherits(z, "try-error")) 
     return(z)
+  if ("alpha" %in% names(list(...))) 
+    stop(paste("Could not calculate C with alpha =", list(...)$alpha, "as input"))
   CalculateC(a, b, ..., viaQR = FALSE, alpha = 0, returnAlpha = returnAlpha)
 }
 
