@@ -15,6 +15,7 @@
 #' 
 #'
 #' @return Generated version of y
+#' @importFrom ffmanova matlabColon
 #' @export
 #'
 #' @examples
