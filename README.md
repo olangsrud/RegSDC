@@ -2,6 +2,10 @@
 
 ### Information Preserving Regression-based Tools for Statistical Disclosure Control
 
+Official version on CRAN: [https://cran.r-project.org/package=RegSDC](https://cran.r-project.org/package=RegSDC)
+
+***
+
 Implementation of the methods described in: 
 
 
