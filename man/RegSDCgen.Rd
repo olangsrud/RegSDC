@@ -6,7 +6,7 @@
 \title{Regression-based SDC Tools - General data generation}
 \usage{
 RegSDCgen(y, x = NULL, doSVD = FALSE, yNew = NULL, lambda = Inf,
-  makeunique = TRUE, ensureIntercept = TRUE)
+  makeunique = TRUE, ensureIntercept = TRUE, returnParts = FALSE)
 }
 \arguments{
 \item{y}{Matrix of confidential variables}
@@ -22,6 +22,8 @@ RegSDCgen(y, x = NULL, doSVD = FALSE, yNew = NULL, lambda = Inf,
 \item{makeunique}{Parameter to be used in GenQR}
 
 \item{ensureIntercept}{Whether to ensure/include a constant term. Non-NULL x is subjected to \code{\link{EnsureIntercept}}}
+
+\item{returnParts}{Alternative output two matrices: yHat (fitted) and yRes (generated residuals).}
 }
 \value{
 Generated version of y

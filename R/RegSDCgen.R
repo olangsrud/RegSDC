@@ -11,6 +11,7 @@
 #' @param lambda ROMM parameter
 #' @param makeunique Parameter to be used in GenQR 
 #' @param ensureIntercept Whether to ensure/include a constant term. Non-NULL x is subjected to \code{\link{EnsureIntercept}}
+#' @param returnParts Alternative output two matrices: yHat (fitted) and yRes (generated residuals).
 #' 
 #' @details doSVD has effect on decomposition of y and yNew. Input matrices are subjected to \code{\link{EnsureMatrix}}.
 #' 
@@ -24,7 +25,8 @@
 #' RegSDCgen(exY)
 #' RegSDCgen(exY, yNew = exY + 0.001 * matrix(rnorm(15), 5, 3))  # Close to exY
 #' RegSDCgen(exY, lambda = 0.001)  # Close to exY
-RegSDCgen <- function(y, x = NULL, doSVD = FALSE, yNew = NULL, lambda = Inf, makeunique = TRUE, ensureIntercept = TRUE) {
+RegSDCgen <- function(y, x = NULL, doSVD = FALSE, yNew = NULL, lambda = Inf, makeunique = TRUE, 
+                      ensureIntercept = TRUE, returnParts = FALSE) {
   y <- EnsureMatrix(y)
   x <- EnsureMatrix(x, nrow(y))
   if(ensureIntercept)
@@ -48,6 +50,8 @@ RegSDCgen <- function(y, x = NULL, doSVD = FALSE, yNew = NULL, lambda = Inf, mak
   eSimQ <- GenQR(eSim, doSVD = doSVD, findR = FALSE, makeunique = makeunique)
   if (NCOL(eSimQ) > m) 
     eSimQ <- eSimQ[, seq_len(m), drop = FALSE]
+  if (returnParts)
+    return(list(yHat = yHat, yRes = eSimQ %*% eQR$R))
   yHat + eSimQ %*% eQR$R
 }
 
