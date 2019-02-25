@@ -32,6 +32,14 @@ RegSDCgen <- function(y, x = NULL, doSVD = FALSE, yNew = NULL, lambda = Inf, mak
   if(ensureIntercept)
     x <- EnsureIntercept(x)
   xQ <- GenQR(x, findR = FALSE)
+  
+  if (NROW(xQ) == NCOL(xQ)) {
+    if (returnParts) 
+      return(list(yHat = y, yRes = 0 * y)) 
+    else 
+      return(y)
+  }
+  
   yHat <- xQ %*% (t(xQ) %*% y)
   # makeunique <- !is.null(yNew)
   eQR <- GenQR(y - yHat, doSVD = doSVD, makeunique = makeunique)
