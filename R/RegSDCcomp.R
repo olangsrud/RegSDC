@@ -15,7 +15,6 @@
 #' 
 #'
 #' @return Generated version of y
-#' @importFrom ffmanova matlabColon
 #' @export
 #'
 #' @examples
@@ -74,15 +73,15 @@ RegSDCcomp <- function(y, compCorr = NA, x = NULL, doSVD = FALSE, makeunique = T
   newQ <- GenQR(cbind(xQ, eQR$Q[, colFixed, drop = FALSE], eQR$Q[, colCorr, drop = FALSE], randData), findR = FALSE, makeunique = makeunique)
   if ((nxQ + nFixed + nCorr + m_) > NCOL(newQ)) 
     stop("Not enough dimensions")
-  newQ <- newQ[, matlabColon(nxQ + nFixed + nCorr + 1, nxQ + nFixed + nCorr + m_), drop = FALSE]
+  newQ <- newQ[, SeqInc(nxQ + nFixed + nCorr + 1, nxQ + nFixed + nCorr + m_), drop = FALSE]
   
   cCorr <- compCorr[colCorr]
   
   eSimQ <- eQR$Q
   
-  eSimQ[, colRotate] <- newQ[, matlabColon(1, nRotate), drop = FALSE]
+  eSimQ[, colRotate] <- newQ[, SeqInc(1, nRotate), drop = FALSE]
   
-  eSimQ[, colCorr] <- t(cCorr * t(eSimQ[, colCorr, drop = FALSE]) + sqrt((1 - cCorr^2)) * t(newQ[, matlabColon(nRotate + 1, m_), drop = FALSE]))
+  eSimQ[, colCorr] <- t(cCorr * t(eSimQ[, colCorr, drop = FALSE]) + sqrt((1 - cCorr^2)) * t(newQ[, SeqInc(nRotate + 1, m_), drop = FALSE]))
   
   yHat + eSimQ %*% eQR$R
 }
