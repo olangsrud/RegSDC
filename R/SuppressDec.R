@@ -101,6 +101,97 @@ RoundWhole <- function(x, digits = 9, onlyZeros = FALSE) {
 
 
 
+
+
+#' Reduce data before further processing
+#' 
+#' The function is used to speed up methodology described in section 7 in the paper.
+#'
+#' @param z Z as a matrix
+#' @param x X as a matrix
+#' @param y Y as a matrix
+#' @param digits When non-NULL and when NULL y input, output y estimates close to whole numbers will be rounded using 
+#'        \code{digits} as input to \code{\link{RoundWhole}}.
+#'
+#' @return
+#' @keywords internal
+#' @export
+#'
+#' @examples
+#' # Same data as in the paper
+#' z <- RegSDCdata("sec7z")
+#' x <- RegSDCdata("sec7x")
+#' y <- RegSDCdata("sec7y")  # Now z is t(x) %*% y 
+#' 
+#' a <- ReduceXZ(x, z, y)
+#' b <- ReduceXZ(x, z)
+#' d <- ReduceXZ(x, z = NULL, y)  # No z in output
+#' 
+#' # Identical output for x and z
+#' identical(a$x, b$x)
+#' identical(a$x, d$x)
+#' identical(a$z, b$z)
+#' 
+#' # Same y in output as input
+#' identical(a$y, y)
+#' identical(d$y, y)
+#' 
+#' # Estimate of y (yHat) when NULL y input
+#' b$y
+#' 
+#' # These elements of y can be found directly in in z
+#' y[a$yKnown, , drop = FALSE]
+#' # They can be found by searching for unit colSums
+#' colSums(x)[colSums(x) == 1]
+#' 
+#' # These trivial data rows can be omitted when processing data
+#' x[!a$yKnown, ]
+#' # Now several columns can be omitted since zero colSums
+#' colSums0 <- colSums(x[!a$yKnown, ]) == 0
+#' # The resulting matrix is output from the function
+#' identical(x[!a$yKnown, !colSums0], a$x)
+#' 
+#' # Output z can be computed from this output x
+#' identical(t(a$x) %*% y[!a$yKnown, , drop = FALSE], a$z)
+ReduceXZ <- function(x, z = NULL, y = NULL, digits = 9) {
+  yNULL <- is.null(y)
+  zNULL <- is.null(z)
+  colSums_1 <- which(colSums(x) == 1)
+  x1 <- x[, colSums_1, drop = FALSE]
+  x1dgT <- as(x1, "dgTMatrix")
+  nonDub <- x1dgT@j[x1dgT@x != 0][!duplicated(x1dgT@i[x1dgT@x != 0])] + 1L
+  x1 <- x1[, nonDub, drop = FALSE]
+  if (!zNULL) 
+    zA <- z[colSums_1[nonDub], , drop = FALSE]
+  zA1 <- matrix(1, NCOL(x1), 1)
+  yKnown1 <- round(x1 %*% zA1)
+  yKnown1_0 <- which(yKnown1 == 0)
+  if (yNULL) {
+    yHat <- x1 %*% zA
+  } else {
+    yHat <- y
+    yHat[yKnown1_0, ] <- 0
+  }
+  if (!zNULL) 
+    z <- z - crossprod(x, yHat)
+  x <- x[yKnown1_0, , drop = FALSE]
+  colSums_ok <- which(colSums(x) != 0)
+  if (!zNULL) 
+    z <- z[colSums_ok, , drop = FALSE]
+  x <- x[, colSums_ok, drop = FALSE]
+  if (yNULL) {
+    yHat[yKnown1_0, ] <- Z2Yhat(z, x, digits = NA)
+    if (!is.na(digits)) 
+      yHat <- RoundWhole(yHat, digits = digits)
+  } else {
+    yHat <- y
+  }
+  list(x = x, z = z, yKnown = yKnown1 != 0, y = yHat)
+}
+
+
+
+
 #' Extended variant of RegSDCipso
 #' 
 #' Possible to generate several y's and to re-scale residuals.
