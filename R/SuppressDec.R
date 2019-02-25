@@ -29,6 +29,48 @@ SeqInc <- function (from, to)
 
 
 
+
+
+
+#' Yhat from X and Z
+#' 
+#' Implementation of equation 21 in the paper.
+#' 
+#' Generalized inverse is computed by \code{\link{ginv}}.
+#' In practise, the computations can be speeded up using reduced versions of X and Z. See.
+#'
+#' @param z Z as a matrix
+#' @param x X as a matrix
+#' @param digits When non-NULL, output values close to whole numbers will be rounded using 
+#'        \code{digits} as input to \code{\link{RoundWhole}}.
+#'
+#' @return Yhat as a matrix
+#' @importFrom MASS ginv
+#' @export
+#'
+#' @examples
+#' # Same data as in the paper
+#' z <- RegSDCdata("sec7z")
+#' x <- RegSDCdata("sec7x")
+#' Z2Yhat(z, x)
+#' 
+#' # With y known, yHat can be computed in other ways
+#' y <- RegSDCdata("sec7y")  # Now z is t(x) %*% y 
+#' fitted(lm(y ~ x - 1))
+#' IpsoExtra(y, x, FALSE, resScale = 0)
+Z2Yhat <- function(z, x, digits = 9) {
+  yHat <- crossprod(ginv(as.matrix(x)), z)
+  if(!is.null(rownames(x)))
+    rownames(yHat) <- rownames(x)
+  if (!is.null(digits)) 
+    if (!is.na(digits)) 
+      yHat <- RoundWhole(yHat, digits = digits)
+  yHat
+}
+
+
+
+
 #' Round values that are close two whole numbers
 #'
 #' @param x vector or matrix
