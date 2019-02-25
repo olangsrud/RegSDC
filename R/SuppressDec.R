@@ -8,9 +8,9 @@ ColRepMatrix <- function(x, nRep) {
   cn <- colnames(x)
   rn <- rownames(x)
   x <- matrix(x, nrow(x), ncol(x) * nRep)
-  if (is.null(cn)) 
-    colnames(x) <- cn
-  if (is.null(rn)) 
+  if (!is.null(cn)) 
+    colnames(x) <- rep_len(cn, ncol(x))
+  if (!is.null(rn)) 
     rownames(x) <- rn
   x
 }
@@ -25,4 +25,110 @@ SeqInc <- function (from, to)
     integer(0)
   }
   else from:to
+}
+
+
+
+
+
+
+
+#' Extended variant of RegSDCipso
+#' 
+#' Possible to generate several y's and to re-scale residuals.
+#' 
+#' @param y Matrix of confidential variables
+#' @param x Matrix of non-confidential variables
+#' @param ensureIntercept Whether to ensure/include a constant term. Non-NULL x is subjected to \code{\link{EnsureIntercept}}
+#' @param returnParts Alternative output two matrices: yHat (fitted) and yRes (generated residuals).
+#' @param nRep Integer, when >1, several y's will be generated. Extra columns in output.
+#' @param resScale Residuals will be scaled by resScale
+#' @param digits Digits used to detect perfect fit (caused by fitted values as input). 
+#'      This checking will be done only when rmse is in input. When perfect fit, rmse will be used instead of resScale.
+#' @param rmse Desired root mean square error (residual standard error). Will be used when resScale is 
+#'          NULL or cannot be used (see parameter digits). This parameter is possible only when single y variable. 
+#'
+#' @return Generated version of y
+#' @export
+#' @keywords internal 
+#'
+#' @examples
+#' x <- matrix(1:5, 5, 1)
+#' y <- matrix(10 * (sample(7:39, 15) + 4 * (1:15)), 5, 3)
+#' colnames(y) <- paste("y", 1:3, sep = "")
+#' y1 <- y[, 1, drop = FALSE]
+#' 
+#' IpsoExtra(y, x)  # Same as RegSDCipso(y, x)
+#' 
+#' IpsoExtra(y, x, resScale = 0)  # Fitted values (whole numbers in this case)
+#' IpsoExtra(y, x, nRep = 2, resScale = 1e-05)  # Downscaled residuals 
+#' 
+#' ySynth <- IpsoExtra(y1, x, nRep = 2, rmse = 0.25)  # Downscaled residuals 
+#' summary(lm(ySynth ~ x))  # Identical regression results with Residual standard error: 0.25
+#' 
+#' IpsoExtra(fitted(lm(y1 ~ x)), x, nRep = 2, resScale = 0.1)  # resScale no effect since perfect fit
+#' IpsoExtra(fitted(lm(y1 ~ x)), x, nRep = 2, resScale = 0.1, rmse = 2)  # with warning
+IpsoExtra <- function(y, x = NULL, ensureIntercept = TRUE, returnParts = FALSE, nRep = 1, resScale = NULL, digits = 9, rmse = NULL) {
+  y <- EnsureMatrix(y)
+  x <- EnsureMatrix(x, nrow(y))
+  if (ensureIntercept) 
+    x <- EnsureIntercept(x)
+  xQ <- GenQR(x, findR = FALSE)
+  
+  if (!is.null(rmse)) 
+    if (NCOL(y) > 1) 
+      stop("rmse parameter only when single y")
+  
+  if (NROW(xQ) == NCOL(xQ)) {
+    if (!resScale | !rmse) 
+      warning("resScale/rmse ignored when Q from X is square.")
+    if (nRep != 1) 
+      y <- ColRepMatrix(y, nRep)
+    if (returnParts) 
+      return(list(yHat = y, yRes = 0 * y)) else return(y)
+  }
+  
+  yHat <- xQ %*% (t(xQ) %*% y)
+  
+  n <- NROW(y)
+  
+  eQRR <- NULL
+  if (!is.null(digits) & !is.null(resScale)) {
+    if (!is.null(rmse)) 
+      if (max(abs(round(y - yHat, digits = digits))) == 0) {
+        warning("rmse used instead of resScal since perfect fit.")
+        resScale <- NULL
+        eQRR <- matrix(1, 1, 1)  # Changed below
+        m <- 1L
+      }
+  }
+  
+  if (is.null(eQRR)) {
+    eQRR <- GenQR(y - yHat, makeunique = TRUE)$R
+    m <- NROW(eQRR)
+  }
+  if (!is.null(resScale)) {
+    eQRR <- resScale * eQRR
+  } else {
+    if (!is.null(rmse)) 
+      eQRR[] <- sqrt(n - NCOL(xQ)) * rmse
+  }
+  
+  if (nRep != 1) {
+    yHat <- ColRepMatrix(yHat, nRep)
+    yRes <- 0 * yHat
+  }
+  for (i in seq_len(nRep)) {
+    yNew <- matrix(rnorm(n * m), n, m)
+    eSim <- yNew - xQ %*% (t(xQ) %*% yNew)
+    eSimQ <- GenQR(eSim, findR = FALSE, makeunique = TRUE)
+    if (nRep == 1) 
+      yRes <- eSimQ %*% eQRR 
+    else 
+      yRes[, SeqInc(1 + m * (i - 1), m * i)] <- eSimQ %*% eQRR
+  }
+  
+  if (returnParts) 
+    return(list(yHat = yHat, yRes = yRes))
+  yHat + yRes
 }
