@@ -58,6 +58,10 @@ RegSDCgen <- function(y, x = NULL, doSVD = FALSE, yNew = NULL, lambda = Inf, mak
   eSimQ <- GenQR(eSim, doSVD = doSVD, findR = FALSE, makeunique = makeunique)
   if (NCOL(eSimQ) > m) 
     eSimQ <- eSimQ[, seq_len(m), drop = FALSE]
+  if(!is.null(rownames(y))){
+    rownames(yHat) <- rownames(y)
+    rownames(eSimQ) <- rownames(y)
+  }
   if (returnParts)
     return(list(yHat = yHat, yRes = eSimQ %*% eQR$R))
   yHat + eSimQ %*% eQR$R

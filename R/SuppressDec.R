@@ -136,6 +136,10 @@ RoundWhole <- function(x, digits = 9, onlyZeros = FALSE) {
 #' 
 #' IpsoExtra(fitted(lm(y1 ~ x)), x, nRep = 2, resScale = 0.1)  # resScale no effect since perfect fit
 #' IpsoExtra(fitted(lm(y1 ~ x)), x, nRep = 2, resScale = 0.1, rmse = 2)  # with warning
+#' 
+#' # Using data in the paper
+#' IpsoExtra(RegSDCdata("sec7y"), RegSDCdata("sec7x"))  # Similar to Y*
+#' IpsoExtra(RegSDCdata("sec7y"), RegSDCdata("sec7x"), rmse = 1)
 IpsoExtra <- function(y, x = NULL, ensureIntercept = TRUE, returnParts = FALSE, nRep = 1, resScale = NULL, digits = 9, rmse = NULL) {
   y <- EnsureMatrix(y)
   x <- EnsureMatrix(x, nrow(y))
@@ -195,7 +199,10 @@ IpsoExtra <- function(y, x = NULL, ensureIntercept = TRUE, returnParts = FALSE, 
     else 
       yRes[, SeqInc(1 + m * (i - 1), m * i)] <- eSimQ %*% eQRR
   }
-  
+  if(!is.null(rownames(y))){
+    rownames(yHat) <- rownames(y)
+    rownames(yRes) <- rownames(y)
+  }
   if (returnParts) 
     return(list(yHat = yHat, yRes = yRes))
   yHat + yRes

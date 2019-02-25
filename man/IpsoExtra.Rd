@@ -48,5 +48,9 @@ summary(lm(ySynth ~ x))  # Identical regression results with Residual standard e
 
 IpsoExtra(fitted(lm(y1 ~ x)), x, nRep = 2, resScale = 0.1)  # resScale no effect since perfect fit
 IpsoExtra(fitted(lm(y1 ~ x)), x, nRep = 2, resScale = 0.1, rmse = 2)  # with warning
+
+# Using data in the paper
+IpsoExtra(RegSDCdata("sec7y"), RegSDCdata("sec7x"))  # Similar to Y*
+IpsoExtra(RegSDCdata("sec7y"), RegSDCdata("sec7x"), rmse = 1)
 }
 \keyword{internal}
