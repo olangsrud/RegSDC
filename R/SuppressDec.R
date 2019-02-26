@@ -167,6 +167,8 @@ RoundWhole <- function(x, digits = 9, onlyZeros = FALSE) {
 ReduceX <- function(x, z = NULL, y = NULL, digits = 9) {
   yNULL <- is.null(y)
   zNULL <- is.null(z)
+  if(yNULL & zNULL)
+    stop("z or y must be supplied")
   colSums_1 <- which(colSums(x) == 1)
   x1 <- x[, colSums_1, drop = FALSE]
   x1dgT <- as(x1, "dgTMatrix")
