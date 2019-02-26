@@ -22,7 +22,7 @@ Implementation of equation 21 in the paper.
 }
 \details{
 Generalized inverse is computed by \code{\link{ginv}}.
-In practise, the computations can be speeded up using reduced versions of X and Z. See.
+In practise, the computations can be speeded up using reduced versions of X and Z. See \code{\link{ReduceX}}.
 }
 \examples{
 # Same data as in the paper

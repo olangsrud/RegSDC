@@ -4,7 +4,7 @@
 #' @param nRow Expected number of rows
 #' @param nCol Expected number of columns
 #'
-#' @return
+#' @return Input as a matrix 
 #' @export
 #' @keywords internal
 #'

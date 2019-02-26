@@ -13,6 +13,9 @@ RoundWhole(x, digits = 9, onlyZeros = FALSE)
 
 \item{onlyZeros}{Only round values close to zero}
 }
+\value{
+Modified x
+}
 \description{
 Round values that are close two whole numbers
 }

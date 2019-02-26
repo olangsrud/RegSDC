@@ -37,7 +37,7 @@ SeqInc <- function (from, to)
 #' Implementation of equation 21 in the paper.
 #' 
 #' Generalized inverse is computed by \code{\link{ginv}}.
-#' In practise, the computations can be speeded up using reduced versions of X and Z. See.
+#' In practise, the computations can be speeded up using reduced versions of X and Z. See \code{\link{ReduceX}}.
 #'
 #' @param z Z as a matrix
 #' @param x X as a matrix
@@ -77,7 +77,7 @@ Z2Yhat <- function(z, x, digits = 9) {
 #' @param digits parameter to \code{\link{round}}
 #' @param onlyZeros Only round values close to zero 
 #'
-#' @return
+#' @return Modified x
 #' @export
 #' @keywords internal 
 #'
@@ -103,9 +103,14 @@ RoundWhole <- function(x, digits = 9, onlyZeros = FALSE) {
 
 
 
-#' Reduce data before further processing
+#' Reduce dummy matrix, X (and estimate Y)
 #' 
-#' The function is used to speed up methodology described in section 7 in the paper.
+#' In section 7 in the paper \code{ Z = t(X) \%*\% Y} where \code{X} is a dummy matrix. 
+#' Some elements of Y can be found directly as elements in Z. Corresponding rows of X will be removed. 
+#' After removing rows, some columns will only have zeros and these will also be removed.
+#' 
+#' To estimate Y, this function finds some values directly from Z and other values by running \code{\link{Z2Yhat}} on reduced versions of X and Z.  
+#' 
 #'
 #' @param z Z as a matrix
 #' @param x X as a matrix
@@ -113,8 +118,14 @@ RoundWhole <- function(x, digits = 9, onlyZeros = FALSE) {
 #' @param digits When non-NULL and when NULL y input, output y estimates close to whole numbers will be rounded using 
 #'        \code{digits} as input to \code{\link{RoundWhole}}.
 #'
-#' @return
+#' @return A list of four elements:
+#'         \item{\code{x}}{Reduced \code{x}}
+#'         \item{\code{z}}{Corresponding reduced \code{z} or NULL when no \code{z} in input}
+#'         \item{\code{yKnown}}{Logical vector specifying elements of y that can be found directly as elements in z}
+#'         \item{\code{y}}{As \code{y} in input (not reduced) or estimated \code{y} when NULL y in input}
+#'         
 #' @keywords internal
+#' @importFrom  methods as
 #' @export
 #'
 #' @examples
@@ -123,9 +134,9 @@ RoundWhole <- function(x, digits = 9, onlyZeros = FALSE) {
 #' x <- RegSDCdata("sec7x")
 #' y <- RegSDCdata("sec7y")  # Now z is t(x) %*% y 
 #' 
-#' a <- ReduceXZ(x, z, y)
-#' b <- ReduceXZ(x, z)
-#' d <- ReduceXZ(x, z = NULL, y)  # No z in output
+#' a <- ReduceX(x, z, y)
+#' b <- ReduceX(x, z)
+#' d <- ReduceX(x, z = NULL, y)  # No z in output
 #' 
 #' # Identical output for x and z
 #' identical(a$x, b$x)
@@ -153,7 +164,7 @@ RoundWhole <- function(x, digits = 9, onlyZeros = FALSE) {
 #' 
 #' # Output z can be computed from this output x
 #' identical(t(a$x) %*% y[!a$yKnown, , drop = FALSE], a$z)
-ReduceXZ <- function(x, z = NULL, y = NULL, digits = 9) {
+ReduceX <- function(x, z = NULL, y = NULL, digits = 9) {
   yNULL <- is.null(y)
   zNULL <- is.null(z)
   colSums_1 <- which(colSums(x) == 1)
