@@ -14,6 +14,7 @@
 #'
 #' @examples
 SuppressDec <- function(x, z, y = NULL, digits = 9, nRep = 1, yDeduct = NULL, resScale = NULL, rmse = NULL) {
+  origY <- !is.null(y)
   if (is.logical(z)) {
     suppr <- !z
     z <- NULL
@@ -23,6 +24,12 @@ SuppressDec <- function(x, z, y = NULL, digits = 9, nRep = 1, yDeduct = NULL, re
     } else {
       z <- EnsureMatrix(z, NCOL(x))
       suppr <- is.na(z)
+      if (is.null(y))
+          if (any(suppr)){
+            a <- ReduceX(x = x, z = z, digits = digits)
+            y <- a$y
+            origY <- !any(!a$yKnown)
+          }
     }
   }
   nonSuppr <- which(!suppr)
@@ -33,10 +40,23 @@ SuppressDec <- function(x, z, y = NULL, digits = 9, nRep = 1, yDeduct = NULL, re
   } else {
     z <- NULL
   }
-  if (is.null(y) & is.null(rmse)) {
-    stop("rmse must be ... when y is NULL")
-  }
+  
   a <- ReduceX(x = x[, nonSuppr, drop = FALSE], z = z, y = y, digits = digits)
+  
+  if (is.null(y))
+    origY <- !any(!a$yKnown)
+  
+  if (!origY){ 
+    if (is.null(rmse)) {
+        stop("Without original y values, rmse must be supplied.")
+    } else {
+      if (is.null(resScale)){
+        warning("Without original y values, rmse is used instead of resScale.")
+      }
+    }
+  }
+
+  
   if (any(!a$yKnown)) 
     rw <- RoundWhole(IpsoExtra(y = a$y[which(!a$yKnown), , drop = FALSE], x = a$x, nRep = nRep, 
                                ensureIntercept = FALSE, rmse = rmse, resScale = resScale), digit = digits)
@@ -244,7 +264,8 @@ ReduceX <- function(x, z = NULL, y = NULL, digits = 9) {
     z <- z[colSums_ok, , drop = FALSE]
   x <- x[, colSums_ok, drop = FALSE]
   if (yNULL) {
-    yHat[yKnown1_0, ] <- Z2Yhat(z, x, digits = NA)
+    if (length(yKnown1_0))
+      yHat[yKnown1_0, ] <- Z2Yhat(z, x, digits = NA)
     if (!is.na(digits)) 
       yHat <- RoundWhole(yHat, digits = digits)
   } else {
