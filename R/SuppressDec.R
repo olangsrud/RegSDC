@@ -12,7 +12,8 @@
 #' @param suppressed Logical vector defining the suppressed elements of z.
 #' @param digits Output close to whole numbers will be rounded using \code{digits} as input to \code{\link{RoundWhole}}.
 #' @param nRep Integer, when >1, several y's will be generated. Extra columns in output.
-#' @param yDeduct 
+#' @param yDeduct Values to be subtracted from y and added back after the calculations. 
+#'           Can be used to perform the modulo method described in the paper (see examples).
 #' @param resScale Residuals will be scaled by resScale
 #' @param rmse Desired root mean square error (residual standard error). Will be used when resScale is NULL or cannot be used.
 #' 

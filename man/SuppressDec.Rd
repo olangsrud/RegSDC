@@ -20,7 +20,8 @@ SuppressDec(x, z = NULL, y = NULL, suppressed = NULL, digits = 9,
 
 \item{nRep}{Integer, when >1, several y's will be generated. Extra columns in output.}
 
-\item{yDeduct}{}
+\item{yDeduct}{Values to be subtracted from y and added back after the calculations. 
+Can be used to perform the modulo method described in the paper (see examples).}
 
 \item{resScale}{Residuals will be scaled by resScale}
 
