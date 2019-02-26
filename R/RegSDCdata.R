@@ -18,6 +18,8 @@
 #' 
 #' \strong{sec7zAll:} Zall in section 7 of the paper as a matrix
 #' 
+#' \strong{sec7zAllSupp:} As Zall with suppressed values set to NA
+#' 
 #' @importFrom SSBtools Hierarchies2ModelMatrix
 #' @import Matrix
 #' @export
@@ -30,9 +32,9 @@
 #' RegSDCdata("sec7z")
 #' RegSDCdata("sec7xAll")
 #' RegSDCdata("sec7zAll")
+#' RegSDCdata("sec7zAllSupp")
 RegSDCdata <- function(dataset) {
-  if (dataset == "sec7data" | dataset == "sec7y" | dataset == "sec7x" | dataset == "sec7xAll"
-      | dataset == "sec7z" | dataset == "sec7zAll" ) {
+  if (dataset %in% c("sec7data", "sec7y", "sec7x", "sec7xAll", "sec7z", "sec7zAll", "sec7zAllSupp") ) {
     y <- matrix(c(3, 1, 12, 18, 11, 9, 22, 19, 32, 13, 2, 16, 30, 8, 2, 3), ncol=1)
     cols <- paste("col", col(matrix(1:12, 4, 4)), sep = "")
     rows <- paste("row", row(matrix(1:12, 4, 4)), sep = "")
@@ -46,8 +48,13 @@ RegSDCdata <- function(dataset) {
     rownames(m) <- rownames(y)
     if(dataset == "sec7xAll")
       return(as.matrix(m))
-    if(dataset == "sec7zAll")
-      return(as.matrix(t(m) %*% y))
+    if(dataset == "sec7zAll" | dataset == "sec7zAllSupp"){
+      z <- as.matrix(t(m) %*% y)
+      if(dataset == "sec7zAll")
+        return(z)
+      z[z[,1] %in% c(1, 2, 3, 9, 11, 13, 18),] <- NA
+      return(z)
+    }
     z <- as.vector(as.matrix(t(m) %*% y))
     suppressed <- z
     suppressed[z %in% c(1, 2, 3, 9, 11, 13, 18)] <- NA

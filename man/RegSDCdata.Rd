@@ -27,6 +27,8 @@ Function that returns a dataset
 \strong{sec7xAll:} Xall in section 7 of the paper as a matrix
 
 \strong{sec7zAll:} Zall in section 7 of the paper as a matrix
+
+\strong{sec7zAllSupp:} As Zall with suppressed values set to NA
 }
 \examples{
 RegSDCdata("sec7data")
@@ -35,6 +37,7 @@ RegSDCdata("sec7x")
 RegSDCdata("sec7z")
 RegSDCdata("sec7xAll")
 RegSDCdata("sec7zAll")
+RegSDCdata("sec7zAllSupp")
 }
 \author{
 Øyvind Langsrud
