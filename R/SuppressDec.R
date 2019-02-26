@@ -1,3 +1,54 @@
+#' Title
+#'
+#' @param x 
+#' @param z 
+#' @param y 
+#' @param digits 
+#' @param nRep 
+#' @param yDeduct 
+#' @param resScale 
+#' @param rmse 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+SuppressDec <- function(x, z, y = NULL, digits = 9, nRep = 1, yDeduct = NULL, resScale = NULL, rmse = NULL) {
+  if (is.logical(z)) {
+    suppr <- !z
+    z <- NULL
+  } else {
+    if (is.null(z)) {
+      suppr <- rep(FALSE, NCOL(x))
+    } else {
+      z <- EnsureMatrix(z, NCOL(x))
+      suppr <- is.na(z)
+    }
+  }
+  nonSuppr <- which(!suppr)
+  if (is.null(y)) {
+    if (is.null(z)) {
+      stop("NUmerical z needed in input when y is NULL")
+    }
+  } else {
+    z <- NULL
+  }
+  if (is.null(y) & is.null(rmse)) {
+    stop("rmse must be ... when y is NULL")
+  }
+  a <- ReduceX(x = x[, nonSuppr, drop = FALSE], z = z, y = y, digits = digits)
+  if (any(!a$yKnown)) 
+    rw <- RoundWhole(IpsoExtra(y = a$y[which(!a$yKnown), , drop = FALSE], x = a$x, nRep = nRep, 
+                               ensureIntercept = FALSE, rmse = rmse, resScale = resScale), digit = digits)
+  if (nRep != 1) 
+    a$y <- ColRepMatrix(a$y, nRep)
+  if (any(!a$yKnown)) 
+    a$y[which(!a$yKnown), ] <- rw
+  a$y
+}
+
+
+
 
 
 ColRepMatrix <- function(x, nRep) {
