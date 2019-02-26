@@ -2,32 +2,38 @@
 % Please edit documentation in R/SuppressDec.R
 \name{SuppressDec}
 \alias{SuppressDec}
-\title{Title}
+\title{Suppressed tabular data: Inner cell frequencies as decimal numbers}
 \usage{
-SuppressDec(x, z, y = NULL, suppressed = NULL, digits = 9,
+SuppressDec(x, z = NULL, y = NULL, suppressed = NULL, digits = 9,
   nRep = 1, yDeduct = NULL, resScale = NULL, rmse = NULL)
 }
 \arguments{
-\item{x}{}
+\item{x}{Dummy matrix where the dimensions matches z and/or y input. Sparse matrix (Matrix package) is possible.}
 
-\item{z}{}
+\item{z}{Frequencies to be published. All, only the safe ones or with suppressed as NA.}
 
-\item{y}{}
+\item{y}{Inner cell frequencies.}
 
-\item{suppressed}{}
+\item{suppressed}{Logical vector defining the suppressed elements of z.}
 
-\item{digits}{}
+\item{digits}{Output close to whole numbers will be rounded using \code{digits} as input to \code{\link{RoundWhole}}.}
 
-\item{nRep}{}
+\item{nRep}{Integer, when >1, several y's will be generated. Extra columns in output.}
 
 \item{yDeduct}{}
 
-\item{resScale}{}
+\item{resScale}{Residuals will be scaled by resScale}
 
-\item{rmse}{}
+\item{rmse}{Desired root mean square error (residual standard error). Will be used when resScale is NULL or cannot be used.}
 }
 \description{
-Title
+Assume that frequencies to be published, \code{z}, can be computed from inner 
+frequencies, \code{y}, via \code{ z = t(x) \%*\% y}, 
+where \code{x} is a dummy matrix. 
+Assuming correct suppression, this function will generate safe inner cell frequencies as decimal numbers.
+}
+\note{
+Capital letters, X, Y and Z, are used in the paper.
 }
 \examples{
 # Same data as in the paper
@@ -48,12 +54,14 @@ SuppressDec(x, z, y)
 # Residual standard error forced to be 1
 SuppressDec(x, z, y, rmse = 1)
 
-# Five ways of obtaining the same output
+# Seven ways of obtaining the same output
 SuppressDec(x, z, rmse = 1)  # slower, y must be estimated
+SuppressDec(x, y = y, rmse = 1)
 SuppressDec(xAll, zAllSupp, y, rmse = 1)
 SuppressDec(xAll, zAllSupp, rmse = 1)  # slower, y must be estimated
 SuppressDec(xAll, zAll, y, is.na(zAllSupp), rmse = 1)
 SuppressDec(xAll, zAll, suppressed = is.na(zAllSupp), rmse = 1)  # y seen in z
+SuppressDec(xAll, y = y, suppressed = is.na(zAllSupp), rmse = 1)
 
 # YhatMod4 and YhatMod10 in Table 2 in paper
 SuppressDec(xAll, zAllSupp, y, yDeduct = 4 * (y\%/\%4), resScale = 0)

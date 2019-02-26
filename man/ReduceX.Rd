@@ -2,7 +2,7 @@
 % Please edit documentation in R/SuppressDec.R
 \name{ReduceX}
 \alias{ReduceX}
-\title{Reduce dummy matrix, X (and estimate Y)}
+\title{Suppressed tabular data: Reduce dummy matrix, X (and estimate Y)}
 \usage{
 ReduceX(x, z = NULL, y = NULL, digits = 9)
 }

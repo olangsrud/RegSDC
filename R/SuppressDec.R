@@ -1,14 +1,22 @@
-#' Title
+#' Suppressed tabular data: Inner cell frequencies as decimal numbers
+#' 
+#' Assume that frequencies to be published, \code{z}, can be computed from inner 
+#' frequencies, \code{y}, via \code{ z = t(x) \%*\% y}, 
+#' where \code{x} is a dummy matrix. 
+#' Assuming correct suppression, this function will generate safe inner cell frequencies as decimal numbers.
+#' 
 #'
-#' @param x 
-#' @param z 
-#' @param y 
-#' @param suppressed 
-#' @param digits 
-#' @param nRep 
+#' @param x Dummy matrix where the dimensions matches z and/or y input. Sparse matrix (Matrix package) is possible.
+#' @param z Frequencies to be published. All, only the safe ones or with suppressed as NA.
+#' @param y Inner cell frequencies.
+#' @param suppressed Logical vector defining the suppressed elements of z.
+#' @param digits Output close to whole numbers will be rounded using \code{digits} as input to \code{\link{RoundWhole}}.
+#' @param nRep Integer, when >1, several y's will be generated. Extra columns in output.
 #' @param yDeduct 
-#' @param resScale 
-#' @param rmse 
+#' @param resScale Residuals will be scaled by resScale
+#' @param rmse Desired root mean square error (residual standard error). Will be used when resScale is NULL or cannot be used.
+#' 
+#' @note Capital letters, X, Y and Z, are used in the paper.
 #'
 #' @return
 #' @export
@@ -32,12 +40,14 @@
 #' # Residual standard error forced to be 1
 #' SuppressDec(x, z, y, rmse = 1)
 #' 
-#' # Five ways of obtaining the same output
+#' # Seven ways of obtaining the same output
 #' SuppressDec(x, z, rmse = 1)  # slower, y must be estimated
+#' SuppressDec(x, y = y, rmse = 1)
 #' SuppressDec(xAll, zAllSupp, y, rmse = 1)
 #' SuppressDec(xAll, zAllSupp, rmse = 1)  # slower, y must be estimated
 #' SuppressDec(xAll, zAll, y, is.na(zAllSupp), rmse = 1)
 #' SuppressDec(xAll, zAll, suppressed = is.na(zAllSupp), rmse = 1)  # y seen in z
+#' SuppressDec(xAll, y = y, suppressed = is.na(zAllSupp), rmse = 1)
 #' 
 #' # YhatMod4 and YhatMod10 in Table 2 in paper
 #' SuppressDec(xAll, zAllSupp, y, yDeduct = 4 * (y%/%4), resScale = 0)
@@ -48,10 +58,13 @@
 #' 
 #' # rmse instead of resScale and 5 draws
 #' SuppressDec(xAll, zAllSupp, y, yDeduct = 10 * (y%/%10), rmse = 1, nRep = 5)
-SuppressDec <- function(x, z, y = NULL, suppressed = NULL, digits = 9, nRep = 1, yDeduct = NULL, resScale = NULL, rmse = NULL) {
+SuppressDec <- function(x, z = NULL, y = NULL, suppressed = NULL, digits = 9, nRep = 1, yDeduct = NULL, resScale = NULL, rmse = NULL) {
   origY <- !is.null(y)
-  if (is.null(z)) 
+  if (!is.null(z)) 
     z <- EnsureMatrix(z, NCOL(x))
+  if (!is.null(y)) 
+    y <- EnsureMatrix(y, NROW(x))
+  
   
   if (!is.null(suppressed)) {
     suppr <- suppressed
@@ -76,7 +89,7 @@ SuppressDec <- function(x, z, y = NULL, suppressed = NULL, digits = 9, nRep = 1,
   nonSuppr <- which(!suppr)
   if (is.null(y)) {
     if (is.null(z)) {
-      stop("NUmerical z needed in input when y is NULL")
+      stop("z needed in input when y is NULL")
     }
   } else {
     z <- NULL
@@ -156,7 +169,7 @@ SeqInc <- function (from, to)
 
 
 
-#' Yhat from X and Z
+#' Suppressed tabular data: Yhat from X and Z
 #' 
 #' Implementation of equation 21 in the paper.
 #' 
@@ -212,6 +225,8 @@ Z2Yhat <- function(z, x, digits = 9) {
 #' RoundWhole(x, 3)  # All values rounded
 #' RoundWhole(x, 3, TRUE)  # One value rounded
 RoundWhole <- function(x, digits = 9, onlyZeros = FALSE) {
+  if (is.null(digits))
+    return(x)
   round_x <- round(x)
   round_x_digits <- round(x, digits = digits)
   if (onlyZeros) 
@@ -228,7 +243,7 @@ RoundWhole <- function(x, digits = 9, onlyZeros = FALSE) {
 
 
 
-#' Reduce dummy matrix, X (and estimate Y)
+#' Suppressed tabular data: Reduce dummy matrix, X (and estimate Y)
 #' 
 #' In section 7 in the paper \code{ Z = t(X) \%*\% Y} where \code{X} is a dummy matrix. 
 #' Some elements of Y can be found directly as elements in Z. Corresponding rows of X will be removed. 
@@ -320,8 +335,9 @@ ReduceX <- function(x, z = NULL, y = NULL, digits = 9) {
   if (yNULL) {
     if (length(yKnown1_0))
       yHat[yKnown1_0, ] <- Z2Yhat(z, x, digits = NA)
-    if (!is.na(digits)) 
-      yHat <- RoundWhole(yHat, digits = digits)
+    if (!is.null(digits))
+      if (!is.na(digits)) 
+        yHat <- RoundWhole(yHat, digits = digits)
   } else {
     yHat <- y
   }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/SuppressDec.R
 \name{Z2Yhat}
 \alias{Z2Yhat}
-\title{Yhat from X and Z}
+\title{Suppressed tabular data: Yhat from X and Z}
 \usage{
 Z2Yhat(z, x, digits = 9)
 }
