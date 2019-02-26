@@ -4,8 +4,8 @@
 \alias{SuppressDec}
 \title{Title}
 \usage{
-SuppressDec(x, z, y = NULL, digits = 9, nRep = 1, yDeduct = NULL,
-  resScale = NULL, rmse = NULL)
+SuppressDec(x, z, y = NULL, suppressed = NULL, digits = 9,
+  nRep = 1, yDeduct = NULL, resScale = NULL, rmse = NULL)
 }
 \arguments{
 \item{x}{}
@@ -13,6 +13,8 @@ SuppressDec(x, z, y = NULL, digits = 9, nRep = 1, yDeduct = NULL,
 \item{z}{}
 
 \item{y}{}
+
+\item{suppressed}{}
 
 \item{digits}{}
 

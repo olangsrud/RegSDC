@@ -3,6 +3,7 @@
 #' @param x 
 #' @param z 
 #' @param y 
+#' @param suppressed 
 #' @param digits 
 #' @param nRep 
 #' @param yDeduct 
@@ -13,25 +14,31 @@
 #' @export
 #'
 #' @examples
-SuppressDec <- function(x, z, y = NULL, digits = 9, nRep = 1, yDeduct = NULL, resScale = NULL, rmse = NULL) {
+SuppressDec <- function(x, z, y = NULL, suppressed = NULL, digits = 9, nRep = 1, yDeduct = NULL, resScale = NULL, rmse = NULL) {
   origY <- !is.null(y)
-  if (is.logical(z)) {
-    suppr <- !z
-    z <- NULL
+  if (is.null(z)) 
+    z <- EnsureMatrix(z, NCOL(x))
+  
+  if (!is.null(suppressed)) {
+    suppr <- suppressed
   } else {
+    
     if (is.null(z)) {
       suppr <- rep(FALSE, NCOL(x))
     } else {
-      z <- EnsureMatrix(z, NCOL(x))
       suppr <- is.na(z)
-      if (is.null(y))
-          if (any(suppr)){
-            a <- ReduceX(x = x, z = z, digits = digits)
-            y <- a$y
-            origY <- !any(!a$yKnown)
-          }
     }
   }
+  
+  if (is.null(y)) 
+    if (!is.null(suppressed)) 
+      if (!any(is.na(z))) 
+        if (any(suppr)) {
+          a <- ReduceX(x = x, z = z, digits = digits)
+          y <- a$y
+          origY <- !any(!a$yKnown)
+        }
+  
   nonSuppr <- which(!suppr)
   if (is.null(y)) {
     if (is.null(z)) {
@@ -41,25 +48,27 @@ SuppressDec <- function(x, z, y = NULL, digits = 9, nRep = 1, yDeduct = NULL, re
     z <- NULL
   }
   
-  a <- ReduceX(x = x[, nonSuppr, drop = FALSE], z = z, y = y, digits = digits)
+  a <- ReduceX(x = x[, nonSuppr, drop = FALSE], z = z[nonSuppr, , drop = FALSE], y = y, digits = digits)
   
-  if (is.null(y))
+  
+  if (is.null(y)) 
     origY <- !any(!a$yKnown)
   
-  if (!origY){ 
+  if (!origY) {
     if (is.null(rmse)) {
-        stop("Without original y values, rmse must be supplied.")
+      stop("Without original y values, rmse must be supplied.")
     } else {
-      if (is.null(resScale)){
+      if (!is.null(resScale)) {
         warning("Without original y values, rmse is used instead of resScale.")
       }
     }
   }
-
+  
   
   if (any(!a$yKnown)) 
     rw <- RoundWhole(IpsoExtra(y = a$y[which(!a$yKnown), , drop = FALSE], x = a$x, nRep = nRep, 
                                ensureIntercept = FALSE, rmse = rmse, resScale = resScale), digit = digits)
+  
   if (nRep != 1) 
     a$y <- ColRepMatrix(a$y, nRep)
   if (any(!a$yKnown)) 
@@ -165,6 +174,7 @@ RoundWhole <- function(x, digits = 9, onlyZeros = FALSE) {
     toWhole <- round_x_digits == 0 
   else 
     toWhole <- round_x == round_x_digits
+  toWhole[is.na(toWhole)] <- FALSE
   x[toWhole] <- round_x[toWhole]
   x
 }
