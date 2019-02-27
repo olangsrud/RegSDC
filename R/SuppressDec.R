@@ -5,7 +5,7 @@
 #' where \code{x} is a dummy matrix. 
 #' Assuming correct suppression, this function will generate safe inner cell frequencies as decimal numbers.
 #' 
-#' This function makes use of \code{\link{ReduceX}} and \code{\link{RegSDCipso]].
+#' This function makes use of \code{\link{ReduceX}} and \code{\link{RegSDCipso}}.
 #' 
 #'
 #' @param x Dummy matrix where the dimensions matches z and/or y input. Sparse matrix (Matrix package) is possible.
@@ -21,8 +21,9 @@
 #' 
 #' @note Capital letters, X, Y and Z, are used in the paper.
 #'
-#' @return
+#' @return The inner cell frequencies as decimal numbers
 #' @export
+#' @author Øyvind Langsrud
 #'
 #' @examples
 #' # Same data as in the paper
@@ -190,6 +191,7 @@ SeqInc <- function (from, to)
 #' 
 #' @importFrom MASS ginv
 #' @export
+#' @author Øyvind Langsrud
 #'
 #' @examples
 #' # Same data as in the paper
@@ -222,6 +224,7 @@ Z2Yhat <- function(z, x, digits = 9) {
 #'
 #' @return Modified x
 #' @export
+#' @author Øyvind Langsrud
 #' @keywords internal 
 #'
 #' @examples
@@ -273,6 +276,7 @@ RoundWhole <- function(x, digits = 9, onlyZeros = FALSE) {
 #' @keywords internal
 #' @importFrom  methods as
 #' @export
+#' @author Øyvind Langsrud
 #'
 #' @examples
 #' # Same data as in the paper
@@ -370,6 +374,7 @@ ReduceX <- function(x, z = NULL, y = NULL, digits = 9) {
 #'
 #' @return Generated version of y
 #' @export
+#' @author Øyvind Langsrud
 #' @keywords internal 
 #'
 #' @examples

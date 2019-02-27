@@ -45,3 +45,6 @@ RegSDCromm(y, 100, x)
 # Close to y
 RegSDCromm(y, 0.001, x)
 }
+\author{
+Øyvind Langsrud
+}

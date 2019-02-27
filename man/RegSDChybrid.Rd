@@ -187,3 +187,6 @@ cov(resid(lmY)[clust == "c2", ]) - cov(resid(lmGrP)[clust == "c2", ])
 # Covariance matrices not preserved within cluster pieces
 cov(resid(lmY)[clustP == "a", ]) - cov(resid(lmGrP)[clustP == "a", ])
 }
+\author{
+Øyvind Langsrud
+}

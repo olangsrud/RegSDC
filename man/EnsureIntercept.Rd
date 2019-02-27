@@ -22,4 +22,7 @@ EnsureIntercept(cbind(x, 2))
 EnsureIntercept(cbind(x, 0))
 EnsureIntercept(matrix(0, 4, 0))
 }
+\author{
+Øyvind Langsrud
+}
 \keyword{internal}

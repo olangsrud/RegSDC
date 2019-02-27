@@ -68,3 +68,6 @@ y[, 3] <- y[, 1] + y[, 2]
 # Zero alpha with warning
 RegSDCadd(y, c(0.1, 0.2, 0.3), x)
 }
+\author{
+Øyvind Langsrud
+}

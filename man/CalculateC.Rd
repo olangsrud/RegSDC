@@ -67,3 +67,6 @@ CalculateC(b, a)
 FindAlpha(b1, a)   # alpha smaller than epsAlpha is set to 0 in CalculateC
 CalculateC(b1, a)  # When alpha = 0 C is calculated by GenQR insetad of chol
 }
+\author{
+Øyvind Langsrud
+}

@@ -16,6 +16,7 @@
 #'
 #' @return Generated version of y
 #' @export
+#' @author Øyvind Langsrud
 #'
 #' @examples
 #' x <- matrix(1:10, 10, 1)

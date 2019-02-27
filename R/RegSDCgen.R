@@ -19,6 +19,7 @@
 #' @keywords internal
 #' @importFrom stats rnorm
 #' @export
+#' @author Øyvind Langsrud
 #'
 #' @examples
 #' exY <- matrix(rnorm(15), 5, 3)
@@ -83,6 +84,7 @@ RegSDCgen <- function(y, x = NULL, doSVD = FALSE, yNew = NULL, lambda = Inf, mak
 #' 
 #' @return Generated version of y
 #' @export
+#' @author Øyvind Langsrud
 #'
 #' @examples
 #' x <- matrix(1:5, 5, 1)
@@ -118,6 +120,7 @@ RegSDCipso <- function(y, x = NULL, ensureIntercept = TRUE) {
 #' 
 #' @return Generated version of y
 #' @export
+#' @author Øyvind Langsrud
 #'
 #' @examples
 #' x <- matrix(1:5, 5, 1)
@@ -153,6 +156,7 @@ RegSDCnew <- function(y, yNew, x = NULL, doSVD = FALSE, ensureIntercept = TRUE) 
 #' 
 #' @return Generated version of y
 #' @export
+#' @author Øyvind Langsrud
 #'
 #' @examples
 #' x <- matrix(1:5, 5, 1)

@@ -35,3 +35,6 @@ This function returns RP^T as R. When SVD, Q=U and R=SV^T.
    GenQR(matrix(rnorm(15),5,3)[,c(1,2,1,3)])
    GenQR(matrix(rnorm(15),5,3)[,c(1,2,1,3)],TRUE)
 }
+\author{
+Øyvind Langsrud
+}

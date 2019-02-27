@@ -19,6 +19,7 @@
 #' @details  When epsAlpha=NULL calculations are performed directly (alpha=1) and alpha is not attribute. 
 #' 
 #' @export
+#' @author Øyvind Langsrud
 #'
 #' @examples
 #' x <- 1:10
@@ -125,6 +126,7 @@ CalculateC <- function(a, b, ..., viaQR = NULL, returnAlpha = FALSE) {
 #' FindAlpha is made to handle problematic special cases.
 #'  
 #' @export
+#' @author Øyvind Langsrud
 #' @seealso See examples in the documentation of \code{\link{CalculateC}}
 FindAlpha <- function(a, b, tryViaQR = TRUE) {
   ata <- t(a) %*% a

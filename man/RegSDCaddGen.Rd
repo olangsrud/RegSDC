@@ -35,4 +35,7 @@ Residuals from arbitrary data with a synthetic addition
 \details{
 Use epsAlpha=NULL to avoid calculation of alpha. Use of alpha (<1) will produce a warning. Input matrices are subjected to \code{\link{EnsureMatrix}}.
 }
+\author{
+Øyvind Langsrud
+}
 \keyword{internal}

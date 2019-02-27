@@ -40,4 +40,7 @@ RegSDCgen(exY)
 RegSDCgen(exY, yNew = exY + 0.001 * matrix(rnorm(15), 5, 3))  # Close to exY
 RegSDCgen(exY, lambda = 0.001)  # Close to exY
 }
+\author{
+Øyvind Langsrud
+}
 \keyword{internal}

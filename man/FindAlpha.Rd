@@ -30,3 +30,6 @@ FindAlpha is made to handle problematic special cases.
 \seealso{
 See examples in the documentation of \code{\link{CalculateC}}
 }
+\author{
+Øyvind Langsrud
+}

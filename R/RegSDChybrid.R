@@ -68,6 +68,7 @@ AdjustQR <- function(y, x = NULL, xOrth = GenQR(x, findR = FALSE), ...) {
 #' @return Generated version of y
 #' @importFrom stats model.matrix
 #' @export
+#' @author Øyvind Langsrud
 #'
 #' @examples
 #' #################################################

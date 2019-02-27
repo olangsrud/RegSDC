@@ -36,3 +36,6 @@ summary(lm(ySynth[, 1] ~ x))
 cov(y) - cov(ySynth)
 cov(residuals(lm(y ~ x))) - cov(residuals(lm(ySynth ~ x)))
 }
+\author{
+Øyvind Langsrud
+}

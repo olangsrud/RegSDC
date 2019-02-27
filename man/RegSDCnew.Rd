@@ -37,3 +37,6 @@ RegSDCnew(y, matrix(rnorm(15), 5, 3), x)
 # Close to y
 RegSDCnew(y, y + 0.001 * matrix(rnorm(15), 5, 3), x)
 }
+\author{
+Øyvind Langsrud
+}

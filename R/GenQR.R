@@ -17,6 +17,7 @@
 #'
 #' @return List with Q and R or just Q
 #' @export
+#' @author Øyvind Langsrud
 #'
 #' @examples
 #'    GenQR(matrix(rnorm(15),5,3))

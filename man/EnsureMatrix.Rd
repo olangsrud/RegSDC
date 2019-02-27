@@ -32,4 +32,7 @@ EnsureMatrix(x, 3, 2)
 try(EnsureMatrix(x, 3, 3))
 try(EnsureMatrix(NULL, 3, 3))
 }
+\author{
+Øyvind Langsrud
+}
 \keyword{internal}

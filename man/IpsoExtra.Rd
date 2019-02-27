@@ -53,4 +53,7 @@ IpsoExtra(fitted(lm(y1 ~ x)), x, nRep = 2, resScale = 0.1, rmse = 2)  # with war
 IpsoExtra(RegSDCdata("sec7y"), RegSDCdata("sec7x"))  # Similar to Y*
 IpsoExtra(RegSDCdata("sec7y"), RegSDCdata("sec7x"), rmse = 1)
 }
+\author{
+Øyvind Langsrud
+}
 \keyword{internal}

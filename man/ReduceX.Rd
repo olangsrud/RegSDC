@@ -68,4 +68,7 @@ identical(x[!a$yKnown, !colSums0], a$x)
 # Output z can be computed from this output x
 identical(t(a$x) \%*\% y[!a$yKnown, , drop = FALSE], a$z)
 }
+\author{
+Øyvind Langsrud
+}
 \keyword{internal}

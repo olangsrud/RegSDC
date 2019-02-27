@@ -26,4 +26,7 @@ RoundWhole(x, 4)  # One value rounded
 RoundWhole(x, 3)  # All values rounded
 RoundWhole(x, 3, TRUE)  # One value rounded
 }
+\author{
+Øyvind Langsrud
+}
 \keyword{internal}

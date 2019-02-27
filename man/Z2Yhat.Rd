@@ -38,3 +38,6 @@ IpsoExtra(y, x, FALSE, resScale = 0)
 \seealso{
 \code{\link{IpsoExtra}}
 }
+\author{
+Øyvind Langsrud
+}

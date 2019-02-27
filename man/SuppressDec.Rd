@@ -27,11 +27,17 @@ Can be used to perform the modulo method described in the paper (see examples).}
 
 \item{rmse}{Desired root mean square error (residual standard error). Will be used when resScale is NULL or cannot be used.}
 }
+\value{
+The inner cell frequencies as decimal numbers
+}
 \description{
 Assume that frequencies to be published, \code{z}, can be computed from inner 
 frequencies, \code{y}, via \code{ z = t(x) \%*\% y}, 
 where \code{x} is a dummy matrix. 
 Assuming correct suppression, this function will generate safe inner cell frequencies as decimal numbers.
+}
+\details{
+This function makes use of \code{\link{ReduceX}} and \code{\link{RegSDCipso}}.
 }
 \note{
 Capital letters, X, Y and Z, are used in the paper.
@@ -73,4 +79,7 @@ SuppressDec(xAll, zAllSupp, y, yDeduct = 10 * (y\%/\%10), resScale = 0.1)
 
 # rmse instead of resScale and 5 draws
 SuppressDec(xAll, zAllSupp, y, yDeduct = 10 * (y\%/\%10), rmse = 1, nRep = 5)
+}
+\author{
+Øyvind Langsrud
 }

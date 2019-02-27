@@ -59,3 +59,6 @@ summary(lm(y[, 1] ~ x))
 summary(lm(yQR[, 1] ~ x))
 summary(lm(ySVD[, 1] ~ x))
 }
+\author{
+Øyvind Langsrud
+}

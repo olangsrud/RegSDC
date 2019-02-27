@@ -19,6 +19,7 @@
 #' @return Generated version of y
 #' @keywords internal
 #' @export
+#' @author Øyvind Langsrud
 RegSDCaddGen <- function(y, yStart, x = NULL, epsAlpha = 1e-07, AlphaHandler = warning, alphaAttr = TRUE, makeunique = TRUE, ensureIntercept = TRUE) {
   y <- EnsureMatrix(y)
   yStart <- EnsureMatrix(yStart, nrow(y), ncol(y))
@@ -77,6 +78,7 @@ RegSDCaddGen <- function(y, yStart, x = NULL, epsAlpha = 1e-07, AlphaHandler = w
 #' 
 #' @return Generated version of y with alpha as attribute
 #' @export
+#' @author Øyvind Langsrud
 #' @examples
 #' x <- matrix(1:10, 10, 1)
 #' y <- matrix(rnorm(30) + 1:30, 10, 3)
