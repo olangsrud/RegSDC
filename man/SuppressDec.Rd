@@ -68,7 +68,7 @@ SuppressDec(xAll, y = y, suppressed = is.na(zAllSupp), rmse = 1)
 SuppressDec(xAll, zAllSupp, y, yDeduct = 4 * (y\%/\%4), resScale = 0)
 SuppressDec(xAll, zAllSupp, y, yDeduct = 10 * (y\%/\%10), rmse = 0)
 
-# As Table 3 in paper (but other random values)
+# As data in Table 3 in paper (but other random values)
 SuppressDec(xAll, zAllSupp, y, yDeduct = 10 * (y\%/\%10), resScale = 0.1)
 
 # rmse instead of resScale and 5 draws

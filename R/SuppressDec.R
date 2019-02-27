@@ -5,6 +5,8 @@
 #' where \code{x} is a dummy matrix. 
 #' Assuming correct suppression, this function will generate safe inner cell frequencies as decimal numbers.
 #' 
+#' This function makes use of \code{\link{ReduceX}} and \code{\link{RegSDCipso]].
+#' 
 #'
 #' @param x Dummy matrix where the dimensions matches z and/or y input. Sparse matrix (Matrix package) is possible.
 #' @param z Frequencies to be published. All, only the safe ones or with suppressed as NA.
@@ -54,7 +56,7 @@
 #' SuppressDec(xAll, zAllSupp, y, yDeduct = 4 * (y%/%4), resScale = 0)
 #' SuppressDec(xAll, zAllSupp, y, yDeduct = 10 * (y%/%10), rmse = 0)
 #' 
-#' # As Table 3 in paper (but other random values)
+#' # As data in Table 3 in paper (but other random values)
 #' SuppressDec(xAll, zAllSupp, y, yDeduct = 10 * (y%/%10), resScale = 0.1)
 #' 
 #' # rmse instead of resScale and 5 draws
@@ -183,6 +185,9 @@ SeqInc <- function (from, to)
 #'        \code{digits} as input to \code{\link{RoundWhole}}.
 #'
 #' @return Yhat as a matrix
+#' 
+#' @seealso \code{\link{IpsoExtra}}
+#' 
 #' @importFrom MASS ginv
 #' @export
 #'

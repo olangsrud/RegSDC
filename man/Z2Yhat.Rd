@@ -35,3 +35,6 @@ y <- RegSDCdata("sec7y")  # Now z is t(x) \%*\% y
 fitted(lm(y ~ x - 1))
 IpsoExtra(y, x, FALSE, resScale = 0)
 }
+\seealso{
+\code{\link{IpsoExtra}}
+}
