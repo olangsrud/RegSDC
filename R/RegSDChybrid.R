@@ -59,6 +59,7 @@ AdjustQR <- function(y, x = NULL, xOrth = GenQR(x, findR = FALSE), ...) {
 #'        y1 and y2 (fitted),    e3s and e4s (new residuals),   e3 and e4 (original residuals) 
 #' @param epsAlpha Precision constant for alpha calculation
 #' @param makeunique  Parameter to be used in GenQR
+#' @param tolerance Parameter to \code{\link{Cdiff}} used within the algorithm 
 #' 
 #' @details Input matrices are subjected to \code{\link{EnsureMatrix}}.
 #' Necessary constant terms (intercept) are automatically included. 
@@ -207,7 +208,7 @@ AdjustQR <- function(y, x = NULL, xOrth = GenQR(x, findR = FALSE), ...) {
 RegSDChybrid <- function(y, clusters = NULL, xLocal = NULL, xGlobal = NULL, clusterPieces = NULL, 
                          xClusterPieces = NULL, groupedClusters = NULL, xGroupedClusters = NULL, 
                          alternative = NULL, alpha = NULL, ySim = NULL, returnParts = FALSE, 
-                         epsAlpha = 1e-07, makeunique = TRUE) {
+                         epsAlpha = 1e-07, makeunique = TRUE, tolerance = sqrt(.Machine$double.eps)) {
   y <- EnsureMatrix(y)
   n <- nrow(y)
   m <- ncol(y)
@@ -280,8 +281,8 @@ RegSDChybrid <- function(y, clusters = NULL, xLocal = NULL, xGlobal = NULL, clus
     # --- Item 5 ---
     #eHat4local <- yLocal - yHat1local - yHatGlobal
     #eSimHat4local <- ySimLocal - ySimHat1local - ySimHatGlobal
-    eHat4local <- Cdiff(yLocal , yHat1local + yHatGlobal)
-    eSimHat4local <- Cdiff(ySimLocal , ySimHat1local + ySimHatGlobal)
+    eHat4local <- Cdiff(yLocal , yHat1local + yHatGlobal, tolerance =tolerance)
+    eSimHat4local <- Cdiff(ySimLocal , ySimHat1local + ySimHatGlobal, tolerance =tolerance)
     
     
     # --- Item 6 ---
@@ -304,8 +305,8 @@ RegSDChybrid <- function(y, clusters = NULL, xLocal = NULL, xGlobal = NULL, clus
   # --- Item 8 ---
   #eHat3 <- yHatG - yHat2
   #eSimHat3 <- ySimHatG - ySimHat2
-  eHat3 <- Cdiff(yHatG , yHat2)
-  eSimHat3 <- Cdiff(ySimHatG , ySimHat2)
+  eHat3 <- Cdiff(yHatG , yHat2, tolerance =tolerance)
+  eSimHat3 <- Cdiff(ySimHatG , ySimHat2, tolerance =tolerance)
   
   # --- Item 9 ---
   R3 <- GenQR(eHat3, makeunique = makeunique)$R
@@ -327,7 +328,8 @@ RegSDChybrid <- function(y, clusters = NULL, xLocal = NULL, xGlobal = NULL, clus
       newAlpha <- 1  # new alpha will be computed
     }
     
-    eHat <- y - yHat1 - yHat2
+    #eHat <- y - yHat1 - yHat2
+    eHat <- Cdiff(y , yHat1 + yHat2, tolerance =tolerance)
     for (clust in unique(clusters)) {
       k <- clusters == clust
       if (alternative == "a") 

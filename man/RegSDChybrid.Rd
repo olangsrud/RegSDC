@@ -9,7 +9,8 @@ RegSDChybrid(y, clusters = NULL, xLocal = NULL, xGlobal = NULL,
   clusterPieces = NULL, xClusterPieces = NULL,
   groupedClusters = NULL, xGroupedClusters = NULL,
   alternative = NULL, alpha = NULL, ySim = NULL,
-  returnParts = FALSE, epsAlpha = 1e-07, makeunique = TRUE)
+  returnParts = FALSE, epsAlpha = 1e-07, makeunique = TRUE,
+  tolerance = sqrt(.Machine$double.eps))
 }
 \arguments{
 \item{y}{Matrix of confidential variables}
@@ -40,6 +41,8 @@ y1 and y2 (fitted),    e3s and e4s (new residuals),   e3 and e4 (original residu
 \item{epsAlpha}{Precision constant for alpha calculation}
 
 \item{makeunique}{Parameter to be used in GenQR}
+
+\item{tolerance}{Parameter to \code{\link{Cdiff}} used within the algorithm}
 }
 \value{
 Generated version of y
