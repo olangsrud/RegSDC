@@ -278,8 +278,11 @@ RegSDChybrid <- function(y, clusters = NULL, xLocal = NULL, xGlobal = NULL, clus
     yHatG[k, ] <- yHatGlobal
     
     # --- Item 5 ---
-    eHat4local <- yLocal - yHat1local - yHatGlobal
-    eSimHat4local <- ySimLocal - ySimHat1local - ySimHatGlobal
+    #eHat4local <- yLocal - yHat1local - yHatGlobal
+    #eSimHat4local <- ySimLocal - ySimHat1local - ySimHatGlobal
+    eHat4local <- Cdiff(yLocal , yHat1local + yHatGlobal)
+    eSimHat4local <- Cdiff(ySimLocal , ySimHat1local + ySimHatGlobal)
+    
     
     # --- Item 6 ---
     R4 <- GenQR(eHat4local, makeunique = makeunique)$R
@@ -299,8 +302,10 @@ RegSDChybrid <- function(y, clusters = NULL, xLocal = NULL, xGlobal = NULL, clus
   ySimHat2 <- xQG %*% (t(xQG) %*% ySim)
   
   # --- Item 8 ---
-  eHat3 <- yHatG - yHat2
-  eSimHat3 <- ySimHatG - ySimHat2
+  #eHat3 <- yHatG - yHat2
+  #eSimHat3 <- ySimHatG - ySimHat2
+  eHat3 <- Cdiff(yHatG , yHat2)
+  eSimHat3 <- Cdiff(ySimHatG , ySimHat2)
   
   # --- Item 9 ---
   R3 <- GenQR(eHat3, makeunique = makeunique)$R

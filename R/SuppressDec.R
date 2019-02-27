@@ -119,11 +119,11 @@ SuppressDec <- function(x, z = NULL, y = NULL, suppressed = NULL, digits = 9, nR
   if (any(!a$yKnown)){ 
     if(is.null(yDeduct)){
       rw <- RoundWhole(IpsoExtra(y = a$y[which(!a$yKnown), , drop = FALSE], x = a$x, nRep = nRep, 
-                               ensureIntercept = FALSE, rmse = rmse, resScale = resScale), digit = digits)
+                               ensureIntercept = FALSE, rmse = rmse, resScale = resScale), digits = digits)
     } else {
       yDeduct <- EnsureMatrix(yDeduct[which(!a$yKnown)])
       rw <- RoundWhole(IpsoExtra(y = a$y[which(!a$yKnown), , drop = FALSE] - yDeduct, x = a$x, nRep = nRep, 
-                                 ensureIntercept = FALSE, rmse = rmse, resScale = resScale), digit = digits)
+                                 ensureIntercept = FALSE, rmse = rmse, resScale = resScale), digits = digits)
       if (nRep != 1)
         yDeduct <- ColRepMatrix(yDeduct, nRep)
       rw <- rw + yDeduct

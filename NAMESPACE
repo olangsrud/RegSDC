@@ -2,6 +2,7 @@
 
 export(CalculateC)
 export(CalculateCdirect)
+export(Cdiff)
 export(EnsureIntercept)
 export(EnsureMatrix)
 export(FindAlpha)
