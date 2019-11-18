@@ -409,7 +409,7 @@ IpsoExtra <- function(y, x = NULL, ensureIntercept = TRUE, returnParts = FALSE, 
       stop("rmse parameter only when single y")
   
   if (NROW(xQ) == NCOL(xQ)) {
-    if (!resScale | !rmse) 
+    if (!is.null(resScale) | !is.null(rmse)) 
       warning("resScale/rmse ignored when Q from X is square.")
     if (nRep != 1) 
       y <- ColRepMatrix(y, nRep)
