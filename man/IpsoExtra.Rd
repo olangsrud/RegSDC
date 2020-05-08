@@ -4,8 +4,16 @@
 \alias{IpsoExtra}
 \title{Extended variant of RegSDCipso}
 \usage{
-IpsoExtra(y, x = NULL, ensureIntercept = TRUE, returnParts = FALSE,
-  nRep = 1, resScale = NULL, digits = 9, rmse = NULL)
+IpsoExtra(
+  y,
+  x = NULL,
+  ensureIntercept = TRUE,
+  returnParts = FALSE,
+  nRep = 1,
+  resScale = NULL,
+  digits = 9,
+  rmse = NULL
+)
 }
 \arguments{
 \item{y}{Matrix of confidential variables}

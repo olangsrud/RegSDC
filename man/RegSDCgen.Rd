@@ -5,8 +5,16 @@
 \alias{RegSDCgen}
 \title{Regression-based SDC Tools - General data generation}
 \usage{
-RegSDCgen(y, x = NULL, doSVD = FALSE, yNew = NULL, lambda = Inf,
-  makeunique = TRUE, ensureIntercept = TRUE, returnParts = FALSE)
+RegSDCgen(
+  y,
+  x = NULL,
+  doSVD = FALSE,
+  yNew = NULL,
+  lambda = Inf,
+  makeunique = TRUE,
+  ensureIntercept = TRUE,
+  returnParts = FALSE
+)
 }
 \arguments{
 \item{y}{Matrix of confidential variables}

@@ -5,8 +5,7 @@
 \alias{GenQR}
 \title{Generalized QR decomposition}
 \usage{
-GenQR(x, doSVD = FALSE, findR = TRUE, makeunique = findR,
-  tol = 1e-07)
+GenQR(x, doSVD = FALSE, findR = TRUE, makeunique = findR, tol = 1e-07)
 }
 \arguments{
 \item{x}{Matrix to be decomposed}

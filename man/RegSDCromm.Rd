@@ -5,8 +5,7 @@
 \alias{RegSDCromm}
 \title{Regression-based SDC Tools - Random orthogonal matrix masking (ROMM)}
 \usage{
-RegSDCromm(y, lambda = Inf, x = NULL, doSVD = FALSE,
-  ensureIntercept = TRUE)
+RegSDCromm(y, lambda = Inf, x = NULL, doSVD = FALSE, ensureIntercept = TRUE)
 }
 \arguments{
 \item{y}{Matrix of confidential variables}

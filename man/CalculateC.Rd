@@ -5,8 +5,7 @@
 \alias{CalculateC}
 \title{Calculation of C by solving equation 10 in the paper}
 \usage{
-CalculateCdirect(a, b, epsAlpha = 1e-07, AlphaHandler = warning,
-  alpha = NULL)
+CalculateCdirect(a, b, epsAlpha = 1e-07, AlphaHandler = warning, alpha = NULL)
 
 CalculateC(a, b, ..., viaQR = NULL, returnAlpha = FALSE)
 }

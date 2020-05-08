@@ -5,12 +5,23 @@
 \alias{RegSDChybrid}
 \title{Regression-based SDC Tools - Generalized microaggregation}
 \usage{
-RegSDChybrid(y, clusters = NULL, xLocal = NULL, xGlobal = NULL,
-  clusterPieces = NULL, xClusterPieces = NULL,
-  groupedClusters = NULL, xGroupedClusters = NULL,
-  alternative = NULL, alpha = NULL, ySim = NULL,
-  returnParts = FALSE, epsAlpha = 1e-07, makeunique = TRUE,
-  tolerance = sqrt(.Machine$double.eps))
+RegSDChybrid(
+  y,
+  clusters = NULL,
+  xLocal = NULL,
+  xGlobal = NULL,
+  clusterPieces = NULL,
+  xClusterPieces = NULL,
+  groupedClusters = NULL,
+  xGroupedClusters = NULL,
+  alternative = NULL,
+  alpha = NULL,
+  ySim = NULL,
+  returnParts = FALSE,
+  epsAlpha = 1e-07,
+  makeunique = TRUE,
+  tolerance = sqrt(.Machine$double.eps)
+)
 }
 \arguments{
 \item{y}{Matrix of confidential variables}

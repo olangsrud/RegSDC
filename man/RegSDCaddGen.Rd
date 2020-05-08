@@ -5,9 +5,16 @@
 \alias{RegSDCaddGen}
 \title{Regression-based SDC Tools - Synthetic addition}
 \usage{
-RegSDCaddGen(y, yStart, x = NULL, epsAlpha = 1e-07,
-  AlphaHandler = warning, alphaAttr = TRUE, makeunique = TRUE,
-  ensureIntercept = TRUE)
+RegSDCaddGen(
+  y,
+  yStart,
+  x = NULL,
+  epsAlpha = 1e-07,
+  AlphaHandler = warning,
+  alphaAttr = TRUE,
+  makeunique = TRUE,
+  ensureIntercept = TRUE
+)
 }
 \arguments{
 \item{y}{Matrix of confidential variables}

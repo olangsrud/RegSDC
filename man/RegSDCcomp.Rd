@@ -5,8 +5,14 @@
 \alias{RegSDCcomp}
 \title{Regression-based SDC Tools - Component score correlation control}
 \usage{
-RegSDCcomp(y, compCorr = NA, x = NULL, doSVD = FALSE,
-  makeunique = TRUE, ensureIntercept = TRUE)
+RegSDCcomp(
+  y,
+  compCorr = NA,
+  x = NULL,
+  doSVD = FALSE,
+  makeunique = TRUE,
+  ensureIntercept = TRUE
+)
 }
 \arguments{
 \item{y}{Matrix of confidential variables}

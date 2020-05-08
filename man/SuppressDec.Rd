@@ -4,8 +4,17 @@
 \alias{SuppressDec}
 \title{Suppressed tabular data: Inner cell frequencies as decimal numbers}
 \usage{
-SuppressDec(x, z = NULL, y = NULL, suppressed = NULL, digits = 9,
-  nRep = 1, yDeduct = NULL, resScale = NULL, rmse = NULL)
+SuppressDec(
+  x,
+  z = NULL,
+  y = NULL,
+  suppressed = NULL,
+  digits = 9,
+  nRep = 1,
+  yDeduct = NULL,
+  resScale = NULL,
+  rmse = NULL
+)
 }
 \arguments{
 \item{x}{Dummy matrix where the dimensions matches z and/or y input. Sparse matrix (Matrix package) is possible.}

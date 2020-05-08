@@ -5,8 +5,7 @@
 \alias{RegSDCadd}
 \title{Regression-based SDC Tools - Synthetic addition with residual correlation control}
 \usage{
-RegSDCadd(y, resCorr = NULL, x = NULL, yStart = NULL,
-  ensureIntercept = TRUE)
+RegSDCadd(y, resCorr = NULL, x = NULL, yStart = NULL, ensureIntercept = TRUE)
 }
 \arguments{
 \item{y}{Matrix of confidential variables}
