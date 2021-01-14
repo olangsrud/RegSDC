@@ -370,7 +370,7 @@ ReduceX <- function(x, z = NULL, y = NULL, digits = 9) {
 #' @param digits Digits used to detect perfect fit (caused by fitted values as input). 
 #'      This checking will be done only when rmse is in input. When perfect fit, rmse will be used instead of resScale.
 #' @param rmse Desired root mean square error (residual standard error). Will be used when resScale is 
-#'          NULL or cannot be used (see parameter digits). This parameter is possible only when single y variable. 
+#'          NULL or cannot be used (see parameter digits). This parameter forces the rmse value for one y variable (the first). 
 #'
 #' @return Generated version of y
 #' @export
@@ -404,9 +404,9 @@ IpsoExtra <- function(y, x = NULL, ensureIntercept = TRUE, returnParts = FALSE, 
     x <- EnsureIntercept(x)
   xQ <- GenQR(x, findR = FALSE)
   
-  if (!is.null(rmse)) 
-    if (NCOL(y) > 1) 
-      stop("rmse parameter only when single y")
+  #if (!is.null(rmse)) 
+  #  if (NCOL(y) > 1) 
+  #    stop("rmse parameter only when single y")
   
   if (NROW(xQ) == NCOL(xQ)) {
     if (!is.null(resScale) | !is.null(rmse)) 
@@ -420,14 +420,19 @@ IpsoExtra <- function(y, x = NULL, ensureIntercept = TRUE, returnParts = FALSE, 
   yHat <- xQ %*% (t(xQ) %*% y)
   
   n <- NROW(y)
+  ncoly <- NCOL(y)
   
   eQRR <- NULL
   if (!is.null(digits) & !is.null(resScale)) {
     if (!is.null(rmse)) 
       if (max(abs(round(y - yHat, digits = digits))) == 0) {
-        warning("rmse used instead of resScal since perfect fit.")
+        if (ncoly > 1){
+          warning("rmse with identical residual vectors used instead of resScal since perfect fit.")
+        } else {
+          warning("rmse used instead of resScal since perfect fit.")
+        }
         resScale <- NULL
-        eQRR <- matrix(1, 1, 1)  # Changed below
+        eQRR <- matrix(1, 1, ncoly)  # Changed below
         m <- 1L
       }
   }
@@ -436,6 +441,16 @@ IpsoExtra <- function(y, x = NULL, ensureIntercept = TRUE, returnParts = FALSE, 
     eQRR <- GenQR(y - yHat, makeunique = TRUE)$R
     m <- NROW(eQRR)
   }
+  
+  
+  if (!is.null(rmse)) 
+    if (ncoly > 1){ 
+      rmseVar <- match(TRUE,!is.na(rmse))
+      rmse <- rmse[rmseVar] 
+      resScale <- rmse * sqrt((n - NCOL(xQ))/sum(eQRR[, rmseVar]^2)) 
+    }
+  
+  
   if (!is.null(resScale)) {
     eQRR <- resScale * eQRR
   } else {
@@ -453,8 +468,9 @@ IpsoExtra <- function(y, x = NULL, ensureIntercept = TRUE, returnParts = FALSE, 
     eSimQ <- GenQR(eSim, findR = FALSE, makeunique = TRUE)
     if (nRep == 1) 
       yRes <- eSimQ %*% eQRR 
-    else 
-      yRes[, SeqInc(1 + m * (i - 1), m * i)] <- eSimQ %*% eQRR
+    else {
+      yRes[, SeqInc(1 + ncoly * (i - 1), ncoly * i)] <- eSimQ %*% eQRR
+    }
   }
   if(!is.null(rownames(y))){
     rownames(yHat) <- rownames(y)

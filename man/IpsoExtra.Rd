@@ -32,7 +32,7 @@ IpsoExtra(
 This checking will be done only when rmse is in input. When perfect fit, rmse will be used instead of resScale.}
 
 \item{rmse}{Desired root mean square error (residual standard error). Will be used when resScale is 
-NULL or cannot be used (see parameter digits). This parameter is possible only when single y variable.}
+NULL or cannot be used (see parameter digits). This parameter forces the rmse value for one y variable (the first).}
 }
 \value{
 Generated version of y
