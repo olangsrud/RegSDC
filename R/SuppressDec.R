@@ -22,6 +22,7 @@
 #' @note Capital letters, X, Y and Z, are used in the paper.
 #'
 #' @return The inner cell frequencies as decimal numbers
+#' @importFrom SSBtools RoundWhole
 #' @export
 #' @author Øyvind Langsrud
 #'
@@ -212,41 +213,6 @@ Z2Yhat <- function(z, x, digits = 9) {
       yHat <- RoundWhole(yHat, digits = digits)
   yHat
 }
-
-
-
-
-#' Round values that are close two whole numbers
-#'
-#' @param x vector or matrix
-#' @param digits parameter to \code{\link{round}}
-#' @param onlyZeros Only round values close to zero 
-#'
-#' @return Modified x
-#' @export
-#' @author Øyvind Langsrud
-#' @keywords internal 
-#'
-#' @examples
-#' x <- c(0.0002, 1.00003, 3.00014)
-#' RoundWhole(x)     # No values rounded
-#' RoundWhole(x, 4)  # One value rounded
-#' RoundWhole(x, 3)  # All values rounded
-#' RoundWhole(x, 3, TRUE)  # One value rounded
-RoundWhole <- function(x, digits = 9, onlyZeros = FALSE) {
-  if (is.null(digits))
-    return(x)
-  round_x <- round(x)
-  round_x_digits <- round(x, digits = digits)
-  if (onlyZeros) 
-    toWhole <- round_x_digits == 0 
-  else 
-    toWhole <- round_x == round_x_digits
-  toWhole[is.na(toWhole)] <- FALSE
-  x[toWhole] <- round_x[toWhole]
-  x
-}
-
 
 
 
