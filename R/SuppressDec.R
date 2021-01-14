@@ -77,7 +77,7 @@ SuppressDec <- function(x, z = NULL, y = NULL, suppressed = NULL, digits = 9, nR
     if (is.null(z)) {
       suppr <- rep(FALSE, NCOL(x))
     } else {
-      suppr <- is.na(z)
+      suppr <- is.na(z[, 1])
     }
   }
   
@@ -121,7 +121,7 @@ SuppressDec <- function(x, z = NULL, y = NULL, suppressed = NULL, digits = 9, nR
       rw <- RoundWhole(IpsoExtra(y = a$y[which(!a$yKnown), , drop = FALSE], x = a$x, nRep = nRep, 
                                ensureIntercept = FALSE, rmse = rmse, resScale = resScale), digits = digits)
     } else {
-      yDeduct <- EnsureMatrix(yDeduct[which(!a$yKnown)])
+      yDeduct <- EnsureMatrix(yDeduct)[which(!a$yKnown), , drop = FALSE]
       rw <- RoundWhole(IpsoExtra(y = a$y[which(!a$yKnown), , drop = FALSE] - yDeduct, x = a$x, nRep = nRep, 
                                  ensureIntercept = FALSE, rmse = rmse, resScale = resScale), digits = digits)
       if (nRep != 1)
