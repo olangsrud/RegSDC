@@ -208,10 +208,11 @@ Z2Yhat <- function(z, x, digits = 9) {
   yHat <- crossprod(ginv(as.matrix(x)), z)
   if(!is.null(rownames(x)))
     rownames(yHat) <- rownames(x)
-  if (!is.null(digits)) 
-    if (!is.na(digits)) 
-      yHat <- RoundWhole(yHat, digits = digits)
-  yHat
+  # if (!is.null(digits))    # Taken care of in RoundWhole 
+  #   if (!is.na(digits[1])) # Taken care of in RoundWhole
+  # yHat <- RoundWhole(yHat, digits = digits)
+  # yHat
+  RoundWhole(yHat, digits = digits)
 }
 
 
@@ -311,9 +312,9 @@ ReduceX <- function(x, z = NULL, y = NULL, digits = 9) {
   if (yNULL) {
     if (length(yKnown1_0))
       yHat[yKnown1_0, ] <- Z2Yhat(z, x, digits = NA)
-    if (!is.null(digits))
-      if (!is.na(digits)) 
-        yHat <- RoundWhole(yHat, digits = digits)
+    #if (!is.null(digits))    Taken care of in RoundWhole 
+    #  if (!is.na(digits[1])) ----- // -----
+    yHat <- RoundWhole(yHat, digits = digits)
   } else {
     yHat <- y
   }
