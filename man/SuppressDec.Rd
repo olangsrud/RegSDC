@@ -21,7 +21,7 @@ SuppressDec(
 
 \item{z}{Frequencies to be published. All, only the safe ones or with suppressed as NA.}
 
-\item{y}{Inner cell frequencies.}
+\item{y}{Inner cell frequencies (see details).}
 
 \item{suppressed}{Logical vector defining the suppressed elements of z.}
 
@@ -47,6 +47,8 @@ Assuming correct suppression, this function will generate safe inner cell freque
 }
 \details{
 This function makes use of \code{\link{ReduceX}} and \code{\link{RegSDCipso}}.
+It is not required that \code{y} consists of cell frequencies. A multivariate \code{y} or \code{z} is also possible. 
+Then several values are possible as \code{digits}, \code{resScale} and \code{rmse} input.
 }
 \note{
 Capital letters, X, Y and Z, are used in the paper.

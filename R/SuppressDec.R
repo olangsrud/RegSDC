@@ -6,11 +6,13 @@
 #' Assuming correct suppression, this function will generate safe inner cell frequencies as decimal numbers.
 #' 
 #' This function makes use of \code{\link{ReduceX}} and \code{\link{RegSDCipso}}.
+#' It is not required that \code{y} consists of cell frequencies. A multivariate \code{y} or \code{z} is also possible. 
+#' Then several values are possible as \code{digits}, \code{resScale} and \code{rmse} input. 
 #' 
 #'
 #' @param x Dummy matrix where the dimensions matches z and/or y input. Sparse matrix (Matrix package) is possible.
 #' @param z Frequencies to be published. All, only the safe ones or with suppressed as NA.
-#' @param y Inner cell frequencies.
+#' @param y Inner cell frequencies (see details).
 #' @param suppressed Logical vector defining the suppressed elements of z.
 #' @param digits Output close to whole numbers will be rounded using \code{digits} as input to \code{\link{RoundWhole}}.
 #' @param nRep Integer, when >1, several y's will be generated. Extra columns in output.
