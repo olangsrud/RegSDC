@@ -36,8 +36,8 @@
 RegSDCdata <- function(dataset) {
   if (dataset %in% c("sec7data", "sec7y", "sec7x", "sec7xAll", "sec7z", "sec7zAll", "sec7zAllSupp") ) {
     y <- matrix(c(3, 1, 12, 18, 11, 9, 22, 19, 32, 13, 2, 16, 30, 8, 2, 3), ncol=1)
-    cols <- paste("col", col(matrix(1:12, 4, 4)), sep = "")
-    rows <- paste("row", row(matrix(1:12, 4, 4)), sep = "")
+    cols <- paste("col", col(matrix(1, 4, 4)), sep = "")
+    rows <- paste("row", row(matrix(1, 4, 4)), sep = "")
     rownames(y) <- paste(rows,cols,sep="_")
     colnames(y) <- "freq"
     if(dataset == "sec7y")
