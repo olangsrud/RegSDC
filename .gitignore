@@ -5,3 +5,7 @@
 .bat
 .pdf
 .Rproj
+.gitignore
+..pdf
+RegSDC.Rproj
+generatePDF.bat
