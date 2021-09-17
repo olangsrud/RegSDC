@@ -13,4 +13,4 @@ License: Apache License 2.0 | file LICENSE
 Encoding: UTF-8
 URL: https://github.com/olangsrud/RegSDC
 BugReports: https://github.com/olangsrud/RegSDC/issues
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
