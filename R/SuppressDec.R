@@ -243,7 +243,7 @@ Z2Yhat <- function(z, x, digits = 9) {
 #'         \item{\code{y}}{As \code{y} in input (not reduced) or estimated \code{y} when NULL y in input}
 #'         
 #' @keywords internal
-#' @importFrom  methods as
+#' @importFrom SSBtools As_TsparseMatrix
 #' @export
 #' @author Øyvind Langsrud
 #'
@@ -290,7 +290,7 @@ ReduceX <- function(x, z = NULL, y = NULL, digits = 9) {
     stop("z or y must be supplied")
   colSums_1 <- which(colSums(x) == 1)
   x1 <- x[, colSums_1, drop = FALSE]
-  x1dgT <- as(x1, "dgTMatrix")
+  x1dgT <-As_TsparseMatrix(x1)  # x1dgT <- as(x1, "dgTMatrix")
   nonDub <- x1dgT@j[x1dgT@x != 0][!duplicated(x1dgT@i[x1dgT@x != 0])] + 1L
   x1 <- x1[, nonDub, drop = FALSE]
   if (!zNULL) 
