@@ -159,16 +159,7 @@ ColRepMatrix <- function(x, nRep) {
 }
 
 
-# Own function in SSBtools
-SeqInc <- function (from, to)  
-{
-  if (from > to){
-    if(from-to> 1L)
-      stop("Length of sequence (1+to-from) must be non-negative")
-    integer(0)
-  }
-  else from:to
-}
+
 
 
 
