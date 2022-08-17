@@ -20,6 +20,8 @@
 #'           Can be used to perform the modulo method described in the paper (see examples).
 #' @param resScale Residuals will be scaled by resScale
 #' @param rmse Desired root mean square error (residual standard error). Will be used when resScale is NULL or cannot be used.
+#' @param sparseLimit Limit for the number of rows of a reduced x-matrix within the algorithm. When exceeded, a sparse algorithm is used 
+#'                    (see \code{\link{IpsoExtra}}).
 #' 
 #' @note Capital letters, X, Y and Z, are used in the paper.
 #'
@@ -65,7 +67,7 @@
 #' 
 #' # rmse instead of resScale and 5 draws
 #' SuppressDec(xAll, zAllSupp, y, yDeduct = 10 * (y%/%10), rmse = 1, nRep = 5)
-SuppressDec <- function(x, z = NULL, y = NULL, suppressed = NULL, digits = 9, nRep = 1, yDeduct = NULL, resScale = NULL, rmse = NULL, sparseLimit) {
+SuppressDec <- function(x, z = NULL, y = NULL, suppressed = NULL, digits = 9, nRep = 1, yDeduct = NULL, resScale = NULL, rmse = NULL, sparseLimit = 500) {
   origY <- !is.null(y)
   if (!is.null(z)) 
     z <- EnsureMatrix(z, NCOL(x))
@@ -143,6 +145,7 @@ SuppressDec <- function(x, z = NULL, y = NULL, suppressed = NULL, digits = 9, nR
 
 
 
+
 ColRepMatrix <- function(x, nRep) {
   if (nRep == 1) 
     return(x)
@@ -157,10 +160,6 @@ ColRepMatrix <- function(x, nRep) {
     rownames(x) <- rn
   x
 }
-
-
-
-
 
 
 
@@ -234,6 +233,7 @@ Z2Yhat <- function(z, x, digits = 9) {
 #'         
 #' @keywords internal
 #' @importFrom SSBtools As_TsparseMatrix
+#' @importFrom Matrix which
 #' @export
 #' @author Øyvind Langsrud
 #'
@@ -319,6 +319,13 @@ ReduceX <- function(x, z = NULL, y = NULL, digits = 9) {
 #' Extended variant of RegSDCipso
 #' 
 #' Possible to generate several y's and to re-scale residuals.
+#' Regression fitting by a sparse matrix algorithm is also possible (see reference).   
+#' 
+#' @references 
+#' Douglas Bates and R Development Core Team (2022), 
+#' Comparing Least Squares Calculations, 
+#' R Vignette, 
+#' \code{vignette("Comparisons", package="Matrix")}.  
 #' 
 #' @param y Matrix of confidential variables
 #' @param x Matrix of non-confidential variables
@@ -329,9 +336,13 @@ ReduceX <- function(x, z = NULL, y = NULL, digits = 9) {
 #' @param digits Digits used to detect perfect fit (caused by fitted values as input). 
 #'      This checking will be done only when rmse is in input. When perfect fit, rmse will be used instead of resScale.
 #' @param rmse Desired root mean square error (residual standard error). Will be used when resScale is 
-#'          NULL or cannot be used (see parameter digits). This parameter forces the rmse value for one y variable (the first). 
+#'          NULL or cannot be used (see parameter digits). This parameter forces the rmse value for one y variable (the first).
+#' @param sparseLimit Limit for the number of rows of a reduced x-matrix within the algorithm. When exceeded, a sparse algorithm is used (see reference). 
 #'
 #' @return Generated version of y
+#' @importFrom SSBtools SeqInc DummyDuplicated GaussIndependent
+#' @importFrom Matrix solve crossprod
+#' @importFrom utils flush.console
 #' @export
 #' @author Øyvind Langsrud
 #' @keywords internal 
@@ -356,7 +367,7 @@ ReduceX <- function(x, z = NULL, y = NULL, digits = 9) {
 #' # Using data in the paper
 #' IpsoExtra(RegSDCdata("sec7y"), RegSDCdata("sec7x"))  # Similar to Y*
 #' IpsoExtra(RegSDCdata("sec7y"), RegSDCdata("sec7x"), rmse = 1)
-IpsoExtra <- function(y, x = NULL, ensureIntercept = TRUE, returnParts = FALSE, nRep = 1, resScale = NULL, digits = 9, rmse = NULL, sparseLimit, printInc = TRUE) {
+IpsoExtra <- function(y, x = NULL, ensureIntercept = TRUE, returnParts = FALSE, nRep = 1, resScale = NULL, digits = 9, rmse = NULL, sparseLimit = 500, printInc = TRUE) {
   
   y <- EnsureMatrix(y)
   

@@ -13,7 +13,8 @@ SuppressDec(
   nRep = 1,
   yDeduct = NULL,
   resScale = NULL,
-  rmse = NULL
+  rmse = NULL,
+  sparseLimit = 500
 )
 }
 \arguments{
@@ -35,6 +36,9 @@ Can be used to perform the modulo method described in the paper (see examples).}
 \item{resScale}{Residuals will be scaled by resScale}
 
 \item{rmse}{Desired root mean square error (residual standard error). Will be used when resScale is NULL or cannot be used.}
+
+\item{sparseLimit}{Limit for the number of rows of a reduced x-matrix within the algorithm. When exceeded, a sparse algorithm is used 
+(see \code{\link{IpsoExtra}}).}
 }
 \value{
 The inner cell frequencies as decimal numbers
