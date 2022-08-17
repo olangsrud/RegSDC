@@ -12,7 +12,9 @@ IpsoExtra(
   nRep = 1,
   resScale = NULL,
   digits = 9,
-  rmse = NULL
+  rmse = NULL,
+  sparseLimit = 500,
+  printInc = TRUE
 )
 }
 \arguments{
@@ -33,12 +35,15 @@ This checking will be done only when rmse is in input. When perfect fit, rmse wi
 
 \item{rmse}{Desired root mean square error (residual standard error). Will be used when resScale is 
 NULL or cannot be used (see parameter digits). This parameter forces the rmse value for one y variable (the first).}
+
+\item{sparseLimit}{Limit for the number of rows of a reduced x-matrix within the algorithm. When exceeded, a sparse algorithm is used (see reference).}
 }
 \value{
 Generated version of y
 }
 \description{
 Possible to generate several y's and to re-scale residuals.
+Regression fitting by a sparse matrix algorithm is also possible (see reference).
 }
 \examples{
 x <- matrix(1:5, 5, 1)
@@ -60,6 +65,12 @@ IpsoExtra(fitted(lm(y1 ~ x)), x, nRep = 2, resScale = 0.1, rmse = 2)  # with war
 # Using data in the paper
 IpsoExtra(RegSDCdata("sec7y"), RegSDCdata("sec7x"))  # Similar to Y*
 IpsoExtra(RegSDCdata("sec7y"), RegSDCdata("sec7x"), rmse = 1)
+}
+\references{
+Douglas Bates and R Development Core Team (2022), 
+Comparing Least Squares Calculations, 
+R Vignette, 
+\code{vignette("Comparisons", package="Matrix")}.
 }
 \author{
 Øyvind Langsrud
