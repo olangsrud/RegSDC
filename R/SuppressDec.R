@@ -14,7 +14,7 @@
 #' @param z Frequencies to be published. All, only the safe ones or with suppressed as NA.
 #' @param y Inner cell frequencies (see details).
 #' @param suppressed Logical vector defining the suppressed elements of z.
-#' @param digits Output close to whole numbers will be rounded using \code{digits} as input to \code{\link{RoundWhole}}.
+#' @param digits Output close to whole numbers will be rounded using \code{digits} as input to \code{\link[SSBtools]{RoundWhole}}.
 #' @param nRep Integer, when >1, several y's will be generated. Extra columns in output.
 #' @param yDeduct Values to be subtracted from y and added back after the calculations. 
 #'           Can be used to perform the modulo method described in the paper (see examples).
@@ -169,13 +169,13 @@ ColRepMatrix <- function(x, nRep) {
 #' 
 #' Implementation of equation 21 in the paper.
 #' 
-#' Generalized inverse is computed by \code{\link{ginv}}.
+#' Generalized inverse is computed by \code{\link[MASS]{ginv}}.
 #' In practise, the computations can be speeded up using reduced versions of X and Z. See \code{\link{ReduceX}}.
 #'
 #' @param z Z as a matrix
 #' @param x X as a matrix
 #' @param digits When non-NULL, output values close to whole numbers will be rounded using 
-#'        \code{digits} as input to \code{\link{RoundWhole}}.
+#'        \code{digits} as input to \code{\link[SSBtools]{RoundWhole}}.
 #'
 #' @return Yhat as a matrix
 #' 
@@ -223,7 +223,7 @@ Z2Yhat <- function(z, x, digits = 9) {
 #' @param x X as a matrix
 #' @param y Y as a matrix
 #' @param digits When non-NULL and when NULL y input, output y estimates close to whole numbers will be rounded using 
-#'        \code{digits} as input to \code{\link{RoundWhole}}.
+#'        \code{digits} as input to \code{\link[SSBtools]{RoundWhole}}.
 #'
 #' @return A list of four elements:
 #'         \item{\code{x}}{Reduced \code{x}}

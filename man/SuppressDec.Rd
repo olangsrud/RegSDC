@@ -26,7 +26,7 @@ SuppressDec(
 
 \item{suppressed}{Logical vector defining the suppressed elements of z.}
 
-\item{digits}{Output close to whole numbers will be rounded using \code{digits} as input to \code{\link{RoundWhole}}.}
+\item{digits}{Output close to whole numbers will be rounded using \code{digits} as input to \code{\link[SSBtools]{RoundWhole}}.}
 
 \item{nRep}{Integer, when >1, several y's will be generated. Extra columns in output.}
 
