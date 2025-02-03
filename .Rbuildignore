@@ -3,3 +3,7 @@ README.md
 ^\.Rproj\.user$
 .bat
 .pdf
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.github$
