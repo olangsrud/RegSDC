@@ -14,7 +14,7 @@ ReduceX(x, z = NULL, y = NULL, digits = 9)
 \item{y}{Y as a matrix}
 
 \item{digits}{When non-NULL and when NULL y input, output y estimates close to whole numbers will be rounded using 
-\code{digits} as input to \code{\link{RoundWhole}}.}
+\code{digits} as input to \code{\link[SSBtools]{RoundWhole}}.}
 }
 \value{
 A list of four elements:

@@ -12,7 +12,7 @@ Z2Yhat(z, x, digits = 9)
 \item{x}{X as a matrix}
 
 \item{digits}{When non-NULL, output values close to whole numbers will be rounded using 
-\code{digits} as input to \code{\link{RoundWhole}}.}
+\code{digits} as input to \code{\link[SSBtools]{RoundWhole}}.}
 }
 \value{
 Yhat as a matrix
@@ -21,7 +21,7 @@ Yhat as a matrix
 Implementation of equation 21 in the paper.
 }
 \details{
-Generalized inverse is computed by \code{\link{ginv}}.
+Generalized inverse is computed by \code{\link[MASS]{ginv}}.
 In practise, the computations can be speeded up using reduced versions of X and Z. See \code{\link{ReduceX}}.
 }
 \examples{
