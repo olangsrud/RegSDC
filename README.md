@@ -1,5 +1,12 @@
 #  R package RegSDC
 
+
+| [RegSDC on CRAN](https://cran.r-project.org/package=RegSDC) |  | [pkgdown website](https://olangsrud.github.io/RegSDC/) |  | [GitHub Repository](https://github.com/olangsrud/RegSDC) |
+|----------------------|---|----------------------|---|----------------------|
+
+
+***
+
 ### Information Preserving Regression-based Tools for Statistical Disclosure Control
 
 Official version on CRAN: [https://cran.r-project.org/package=RegSDC](https://cran.r-project.org/package=RegSDC)
