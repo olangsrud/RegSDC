@@ -1,4 +1,4 @@
-#  R package RegSDC   <img src="man/figures/logo.png" align="right" height="150" style="float:right; height:150px;" />  
+#  R package RegSDC   <img src="man/figures/logo.png" align="right" height="150" />  
 
 
 | [RegSDC on CRAN](https://cran.r-project.org/package=RegSDC) |  | [pkgdown website](https://olangsrud.github.io/RegSDC/) |  | [GitHub Repository](https://github.com/olangsrud/RegSDC) |
